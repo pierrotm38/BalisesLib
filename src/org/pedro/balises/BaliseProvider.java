@@ -154,4 +154,10 @@ public interface BaliseProvider
    * @return
    */
   public String getName();
+
+  /**
+   * 
+   * @return
+   */
+  public Collection<Releve> getUpdatedReleves();
 }

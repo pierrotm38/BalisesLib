@@ -283,4 +283,10 @@ public class CachedProvider implements BaliseProvider
   {
     return provider.getName();
   }
+
+  @Override
+  public Collection<Releve> getUpdatedReleves()
+  {
+    return provider.getUpdatedReleves();
+  }
 }

@@ -26,6 +26,7 @@ package org.pedro.balises;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * 
@@ -33,10 +34,11 @@ import java.util.Map;
  */
 public abstract class AbstractBaliseProvider implements BaliseProvider
 {
-  private final String        name;
-  protected final String      country;
-  private Map<String, Balise> balises;
-  private Map<String, Releve> releves;
+  private final String              name;
+  protected final String            country;
+  private Map<String, Balise>       balises;
+  private Map<String, Releve>       releves;
+  private final Map<String, Releve> updatedReleves = new HashMap<String, Releve>();
 
   /**
    * 
@@ -114,8 +116,51 @@ public abstract class AbstractBaliseProvider implements BaliseProvider
    */
   protected final void refreshReleves(final Map<String, Releve> newReleves)
   {
-    // On conserve les anciens (seuls ceux mis a jour sont ecrases
+    // Detection des releves mis a jour
+    findUpdatedReleves(newReleves);
+
+    // On conserve les anciens (seuls ceux mis a jour sont ecrases)
     releves.putAll(newReleves);
+  }
+
+  /**
+   * 
+   * @param newReleves
+   */
+  private void findUpdatedReleves(final Map<String, Releve> newReleves)
+  {
+    // Initialisation
+    updatedReleves.clear();
+
+    // Seulement si les anciens releves sont presents
+    if (releves != null)
+    {
+      for (final Entry<String, Releve> entry : newReleves.entrySet())
+      {
+        // Recherche dans les anciens
+        final Releve ancien = releves.get(entry.getKey());
+        final boolean updated;
+
+        // Nouveau releve
+        if (ancien == null)
+        {
+          updated = true;
+        }
+        // Ancien releve, comparaison de la date
+        else
+        {
+          final long newStamp = (entry.getValue().date == null ? -1 : entry.getValue().date.getTime());
+          final long oldStamp = (ancien.date == null ? -1 : ancien.date.getTime());
+          updated = (newStamp > oldStamp);
+        }
+
+        // Sauvegarde
+        if (updated)
+        {
+          updatedReleves.put(entry.getKey(), entry.getValue());
+        }
+      }
+    }
   }
 
   @Override
@@ -134,5 +179,11 @@ public abstract class AbstractBaliseProvider implements BaliseProvider
   public String getName()
   {
     return name;
+  }
+
+  @Override
+  public Collection<Releve> getUpdatedReleves()
+  {
+    return updatedReleves.values();
   }
 }
