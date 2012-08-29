@@ -130,15 +130,17 @@ public final class ReleveRommaContentHandler implements ContentHandler
 
       else if (TEMPERATURE_TAG.equals(finalName))
       {
-        releve.temperature = Utils.parseDouble(currentString);
+        releve.temperature = (STRING_MOINS_MOINS.equals(currentString) ? null : Utils.parseDouble(currentString));
       }
     }
     catch (final ParseException pe)
     {
+      System.err.println("Error parsing '" + currentString + "' for <" + finalName + ">");
       pe.printStackTrace(System.err);
     }
     catch (final NumberFormatException nfe)
     {
+      System.err.println("Error parsing '" + currentString + "' for <" + finalName + ">");
       nfe.printStackTrace(System.err);
     }
 
