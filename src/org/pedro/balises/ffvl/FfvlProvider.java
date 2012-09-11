@@ -54,7 +54,7 @@ import org.xml.sax.XMLReader;
 public final class FfvlProvider extends AbstractBaliseProvider
 {
   private static final String                URL_FFVL_KEY            = "ffvlKey";
-  private static final String                URL_FFVL_KEY_GROUP      = "\\{" + URL_FFVL_KEY + "\\}";
+  public static final String                 URL_FFVL_KEY_GROUP      = "\\{" + URL_FFVL_KEY + "\\}";
 
   //private static final String                URL_BALISES             = "file:C:/Temp/balise_list.xml";
   //private static final String                URL_BALISES             = "http://www.balisemeteo.com/xml/{" + URL_FFVL_KEY + "}/balise_list.xml";
@@ -64,7 +64,7 @@ public final class FfvlProvider extends AbstractBaliseProvider
   //private static final String                URL_RELEVES             = "http://www.balisemeteo.com/xml/{" + URL_FFVL_KEY + "}/relevemeteo.xml";
   private static final String                URL_RELEVES             = "http://data.ffvl.fr/xml/{" + URL_FFVL_KEY + "}/meteo/relevemeteo.xml";
 
-  private static final String                URL_LAST_UPDATE         = "http://data.ffvl.fr/xml/{" + URL_FFVL_KEY + "}/lastupdate.xml";
+  public static final String                 URL_LAST_UPDATE         = "http://data.ffvl.fr/xml/{" + URL_FFVL_KEY + "}/lastupdate.xml";
 
   private static final String                SUFFIXE_COMPRESSION     = ".gz";
 
@@ -249,11 +249,23 @@ public final class FfvlProvider extends AbstractBaliseProvider
    */
   private InputStream getUnzippedInputStream(final String url) throws IOException
   {
+    return getUnzippedInputStream(url, useZippedData);
+  }
+
+  /**
+   * 
+   * @param url
+   * @param inUseZippedData
+   * @return
+   * @throws IOException
+   */
+  public static InputStream getUnzippedInputStream(final String url, final boolean inUseZippedData) throws IOException
+  {
     // Initialisations
     InputStream retour = null;
 
     // Donnees compressees ou pas ?
-    if (useZippedData)
+    if (inUseZippedData)
     {
       final URLConnection cnx = new URL(url + SUFFIXE_COMPRESSION).openConnection();
       cnx.setConnectTimeout(Utils.CONNECT_TIMEOUT);
