@@ -66,6 +66,8 @@ public final class FfvlProvider extends AbstractBaliseProvider
 
   public static final String                 URL_LAST_UPDATE         = "http://data.ffvl.fr/xml/{" + URL_FFVL_KEY + "}/lastupdate.xml";
 
+  public static final String                 URL_INFOS               = "http://data.ffvl.fr/xml/{" + URL_FFVL_KEY + "}/infos/infos.xml";
+
   private static final String                SUFFIXE_COMPRESSION     = ".gz";
 
   private static final String                URL_BALISE_ID_KEY       = "idBalise";
@@ -77,7 +79,7 @@ public final class FfvlProvider extends AbstractBaliseProvider
 
   // Fuseaux hoaires
   private static final String                TIME_ZONE_ID            = "Europe/Paris";
-  protected static final TimeZone            sourceTimeZone          = TimeZone.getTimeZone(TIME_ZONE_ID);
+  public static final TimeZone               sourceTimeZone          = TimeZone.getTimeZone(TIME_ZONE_ID);
 
   private final SAXParserFactory             factory;
   private final SAXParser                    parser;
