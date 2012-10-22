@@ -36,6 +36,7 @@ public abstract class AbstractBaliseProvider implements BaliseProvider
 {
   private final String              name;
   protected final String            country;
+  protected final String            region;
   private Map<String, Balise>       balises;
   private Map<String, Releve>       releves;
   private final Map<String, Releve> updatedReleves = new HashMap<String, Releve>();
@@ -44,12 +45,14 @@ public abstract class AbstractBaliseProvider implements BaliseProvider
    * 
    * @param name
    * @param country
+   * @param region
    * @param balisesSize
    */
-  public AbstractBaliseProvider(final String name, final String country, final int balisesSize)
+  public AbstractBaliseProvider(final String name, final String country, final String region, final int balisesSize)
   {
     this.name = name;
     this.country = country.toUpperCase();
+    this.region = (region == null ? null : region.toUpperCase());
     balises = new HashMap<String, Balise>(balisesSize);
     releves = new HashMap<String, Releve>(balisesSize);
   }

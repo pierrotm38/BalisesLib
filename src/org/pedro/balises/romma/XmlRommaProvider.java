@@ -28,7 +28,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -41,7 +40,6 @@ import javax.xml.parsers.SAXParserFactory;
 
 import org.pedro.balises.AbstractBaliseProvider;
 import org.pedro.balises.Balise;
-import org.pedro.balises.BaliseProvider;
 import org.pedro.balises.Releve;
 import org.pedro.balises.Utils;
 import org.xml.sax.InputSource;
@@ -102,7 +100,7 @@ public final class XmlRommaProvider extends AbstractBaliseProvider
   public XmlRommaProvider(final String name, final String country, final String rommaKey, final boolean useZippedData)
   {
     // Initialisation
-    super(name, country, 150);
+    super(name, country, null, 150);
     this.rommaKey = rommaKey;
     this.useZippedData = useZippedData;
 
@@ -357,38 +355,5 @@ public final class XmlRommaProvider extends AbstractBaliseProvider
   public boolean isMultiCountries()
   {
     return false;
-  }
-
-  /**
-   * 
-   * @param args
-   */
-  public static void main(String[] args)
-  {
-    try
-    {
-      BaliseProvider provider = new XmlRommaProvider("ROMMA", "fr", "f37e12e32e189a412f4", false);
-
-      boolean balisesUpdateDateUpdated = provider.updateBalisesUpdateDate();
-      System.out.println("balisesUpdateDateUpdated : " + balisesUpdateDateUpdated);
-      System.out.println("MAJ Balises : " + new Date(provider.getBalisesUpdateDate()));
-
-      boolean relevesUpdateDateUpdated = provider.updateRelevesUpdateDate();
-      System.out.println("relevesUpdateDateUpdated : " + relevesUpdateDateUpdated);
-      System.out.println("MAJ Releves : " + new Date(provider.getRelevesUpdateDate()));
-
-      provider.updateBalises();
-      provider.updateReleves();
-      System.out.println("balises : " + provider.getBalises().size());
-      for (Balise balise : provider.getBalises())
-      {
-        System.out.println("balise : " + balise);
-        System.out.println("   releve for " + balise.nom + " (" + balise.id + ") : " + provider.getReleveById(balise.id));
-      }
-    }
-    catch (Throwable th)
-    {
-      th.printStackTrace();
-    }
   }
 }

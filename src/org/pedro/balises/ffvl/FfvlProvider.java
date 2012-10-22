@@ -112,7 +112,7 @@ public final class FfvlProvider extends AbstractBaliseProvider
   public FfvlProvider(final String name, final String country, final String ffvlKey, final boolean useZippedData)
   {
     // Initialisation
-    super(name, country, 150);
+    super(name, country, null, 150);
     this.ffvlKey = ffvlKey;
     this.useZippedData = useZippedData;
 
