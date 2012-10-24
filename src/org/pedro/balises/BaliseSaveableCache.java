@@ -41,52 +41,92 @@ import org.pedro.saveable.Saveable;
  */
 public abstract class BaliseSaveableCache extends BaliseSerializableCache
 {
+  private static final boolean ZIPPED = false;
+
   @Override
   @SuppressWarnings("unchecked")
   public Map<String, Balise> restoreBalises(final String key, final CachedProvider provider) throws IOException
   {
+    final InputStream is = getCacheInputStream(key);
+    final InputStream fis = (ZIPPED ? new GZIPInputStream(is) : is);
+
     try
     {
       // Nouvelle version
-      return loadBalises(new GZIPInputStream(getCacheInputStream(key)), provider);
+      return loadBalises(fis, provider);
     }
     catch (final IOException ioe)
     {
       // Plantage, essai avec l'ancienne version
-      final Map<String, Balise> balises = (Map<String, Balise>)deserializeObject(getCacheInputStream(key));
+      final Map<String, Balise> balises = (Map<String, Balise>)deserializeObject(fis);
       saveBalises(getCacheOutputStream(key), balises);
       return balises;
+    }
+    finally
+    {
+      is.close();
+      fis.close();
     }
   }
 
   @Override
   public void storeBalises(final String key, final Map<String, Balise> balises) throws IOException
   {
-    saveBalises(new GZIPOutputStream(getCacheOutputStream(key)), balises);
+    final OutputStream os = getCacheOutputStream(key);
+    final OutputStream fos = (ZIPPED ? new GZIPOutputStream(os) : os);
+
+    try
+    {
+      saveBalises(fos, balises);
+    }
+    finally
+    {
+      os.close();
+      fos.close();
+    }
   }
 
   @Override
   @SuppressWarnings("unchecked")
   public Map<String, Releve> restoreReleves(final String key, final CachedProvider provider) throws IOException
   {
+    final InputStream is = getCacheInputStream(key);
+    final InputStream fis = (ZIPPED ? new GZIPInputStream(is) : is);
+
     try
     {
       // Nouvelle version
-      return loadReleves(new GZIPInputStream(getCacheInputStream(key)), provider);
+      return loadReleves(fis, provider);
     }
     catch (final IOException ioe)
     {
       // Plantage, essai avec l'ancienne version
-      final Map<String, Releve> releves = (Map<String, Releve>)deserializeObject(getCacheInputStream(key));
+      final Map<String, Releve> releves = (Map<String, Releve>)deserializeObject(fis);
       saveReleves(getCacheOutputStream(key), releves);
       return releves;
+    }
+    finally
+    {
+      is.close();
+      fis.close();
     }
   }
 
   @Override
   public void storeReleves(final String key, final Map<String, Releve> releves) throws IOException
   {
-    saveReleves(new GZIPOutputStream(getCacheOutputStream(key)), releves);
+    final OutputStream os = getCacheOutputStream(key);
+    final OutputStream fos = (ZIPPED ? new GZIPOutputStream(os) : os);
+
+    try
+    {
+      saveReleves(fos, releves);
+    }
+    finally
+    {
+      os.close();
+      fos.close();
+    }
   }
 
   /**
@@ -120,6 +160,10 @@ public abstract class BaliseSaveableCache extends BaliseSerializableCache
       if (out != null)
       {
         out.close();
+      }
+      if (os != null)
+      {
+        os.close();
       }
     }
   }
@@ -162,6 +206,10 @@ public abstract class BaliseSaveableCache extends BaliseSerializableCache
       {
         in.close();
       }
+      if (is != null)
+      {
+        is.close();
+      }
     }
   }
 
@@ -196,6 +244,10 @@ public abstract class BaliseSaveableCache extends BaliseSerializableCache
       if (out != null)
       {
         out.close();
+      }
+      if (os != null)
+      {
+        os.close();
       }
     }
   }
@@ -237,6 +289,10 @@ public abstract class BaliseSaveableCache extends BaliseSerializableCache
       if (in != null)
       {
         in.close();
+      }
+      if (is != null)
+      {
+        is.close();
       }
     }
   }
