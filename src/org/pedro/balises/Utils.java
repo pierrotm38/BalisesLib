@@ -38,13 +38,19 @@ import java.util.TimeZone;
  */
 public abstract class Utils
 {
-  private static final String   STRING_DEUX_POINTS = ":";
+  private static final String   STRING_DEUX_POINTS  = ":";
 
-  private static final TimeZone localTimeZone      = TimeZone.getDefault();
+  private static final TimeZone localTimeZone       = TimeZone.getDefault();
 
-  public static final int       READ_BUFFER_SIZE   = 1024;
-  public static final int       CONNECT_TIMEOUT    = 10000;
-  public static final int       READ_TIMEOUT       = 10000;
+  public static final int       READ_BUFFER_SIZE    = 1024;
+  public static final int       CONNECT_TIMEOUT     = 10000;
+  public static final int       READ_TIMEOUT        = 10000;
+
+  private static final String   STRING_BOOLEAN_TRUE = "true";
+  private static final String   STRING_BOOLEAN_VRAI = "vrai";
+  public static final int       BOOLEAN_NULL        = -1;
+  public static final int       BOOLEAN_TRUE        = 1;
+  public static final int       BOOLEAN_FALSE       = 0;
 
   /**
    * 
@@ -216,6 +222,21 @@ public abstract class Utils
    * @param text
    * @return
    */
+  public static int parsePrimitiveInteger(final String text)
+  {
+    if ((text == null) || (text.trim().length() == 0))
+    {
+      return Integer.MIN_VALUE;
+    }
+
+    return Integer.parseInt(text, 10);
+  }
+
+  /**
+   * 
+   * @param text
+   * @return
+   */
   public static Double parseDouble(final String text)
   {
     if ((text == null) || (text.trim().length() == 0))
@@ -224,6 +245,41 @@ public abstract class Utils
     }
 
     return new Double(Double.parseDouble(text));
+  }
+
+  /**
+   * 
+   * @param text
+   * @return
+   */
+  public static double parsePrimitiveDouble(final String text)
+  {
+    if ((text == null) || (text.trim().length() == 0))
+    {
+      return Double.NaN;
+    }
+
+    return Double.parseDouble(text);
+  }
+
+  /**
+   * 
+   * @param text
+   * @return
+   */
+  public static int parsePrimitiveBoolean(final String text)
+  {
+    if ((text == null) || (text.trim().length() == 0))
+    {
+      return -1;
+    }
+
+    if (STRING_BOOLEAN_TRUE.equalsIgnoreCase(text) || STRING_BOOLEAN_VRAI.equalsIgnoreCase(text))
+    {
+      return 1;
+    }
+
+    return Integer.parseInt(text, 10);
   }
 
   /**
@@ -273,6 +329,31 @@ public abstract class Utils
     }
 
     return false;
+  }
+
+  /**
+   * 
+   * @param value
+   * @return
+   */
+  public static boolean isBooleanNull(final int value)
+  {
+    return (value <= BOOLEAN_NULL);
+  }
+
+  /**
+   * 
+   * @param value
+   * @return
+   */
+  public static boolean getBooleanValue(final int value)
+  {
+    if (value <= BOOLEAN_NULL)
+    {
+      throw new NullPointerException();
+    }
+
+    return (value != BOOLEAN_FALSE);
   }
 
   /**

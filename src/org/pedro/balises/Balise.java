@@ -43,12 +43,12 @@ public class Balise implements Serializable, Saveable
 
   public String             id;
   public String             nom;
-  public Double             latitude;
-  public Double             longitude;
-  public Integer            altitude;
+  public double             latitude         = Double.NaN;
+  public double             longitude        = Double.NaN;
+  public int                altitude         = Integer.MIN_VALUE;
   public String             description;
   public String             commentaire;
-  public Boolean            active;
+  public int                active           = Utils.BOOLEAN_NULL;
 
   private int               hashCode;
 
@@ -67,12 +67,12 @@ public class Balise implements Serializable, Saveable
     calculateHashCode();
 
     nom = SaveableUtils.readString(in);
-    latitude = SaveableUtils.readDouble(in);
-    longitude = SaveableUtils.readDouble(in);
-    altitude = SaveableUtils.readInteger(in);
+    latitude = in.readDouble();
+    longitude = in.readDouble();
+    altitude = in.readInt();
     description = SaveableUtils.readString(in);
     commentaire = SaveableUtils.readString(in);
-    active = SaveableUtils.readBoolean(in);
+    active = in.readInt();
   }
 
   @Override
@@ -81,12 +81,12 @@ public class Balise implements Serializable, Saveable
     SaveableUtils.saveSerialUID(out, this);
     SaveableUtils.writeString(out, id);
     SaveableUtils.writeString(out, nom);
-    SaveableUtils.writeDouble(out, latitude);
-    SaveableUtils.writeDouble(out, longitude);
-    SaveableUtils.writeInteger(out, altitude);
+    out.writeDouble(latitude);
+    out.writeDouble(longitude);
+    out.writeInt(altitude);
     SaveableUtils.writeString(out, description);
     SaveableUtils.writeString(out, commentaire);
-    SaveableUtils.writeBoolean(out, active);
+    out.writeInt(active);
   }
 
   /**
@@ -108,12 +108,12 @@ public class Balise implements Serializable, Saveable
   {
     oos.writeObject(id);
     oos.writeObject(nom);
-    oos.writeObject(latitude);
-    oos.writeObject(longitude);
-    oos.writeObject(altitude);
+    oos.writeDouble(latitude);
+    oos.writeDouble(longitude);
+    oos.writeInt(altitude);
     oos.writeObject(description);
     oos.writeObject(commentaire);
-    oos.writeObject(active);
+    oos.writeInt(active);
     oos.writeInt(hashCode);
   }
 
@@ -138,12 +138,12 @@ public class Balise implements Serializable, Saveable
   {
     id = (String)ois.readObject();
     nom = (String)ois.readObject();
-    latitude = (Double)ois.readObject();
-    longitude = (Double)ois.readObject();
-    altitude = (Integer)ois.readObject();
+    latitude = ois.readDouble();
+    longitude = ois.readDouble();
+    altitude = ois.readInt();
     description = (String)ois.readObject();
     commentaire = (String)ois.readObject();
-    active = (Boolean)ois.readObject();
+    active = ois.readInt();
     hashCode = ois.readInt();
   }
 

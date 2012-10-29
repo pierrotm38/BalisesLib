@@ -113,16 +113,16 @@ public final class BaliseRommaContentHandler implements ContentHandler
     if (STATION_TAG.equals(finalName))
     {
       balise = new Balise();
-      balise.active = Boolean.TRUE;
+      balise.active = Utils.BOOLEAN_TRUE;
     }
     else if (COORD_TAG.equals(finalName))
     {
-      balise.latitude = Utils.parseDouble(atts.getValue(COORD_LATITUDE_ATT));
-      balise.longitude = Utils.parseDouble(atts.getValue(COORD_LONGITUDE_ATT));
+      balise.latitude = Utils.parsePrimitiveDouble(atts.getValue(COORD_LATITUDE_ATT));
+      balise.longitude = Utils.parsePrimitiveDouble(atts.getValue(COORD_LONGITUDE_ATT));
     }
     else if (ALTITUDE_TAG.equals(finalName))
     {
-      balise.altitude = Utils.parseInteger(atts.getValue(ALTITUDE_VALUE_ATT));
+      balise.altitude = Utils.parsePrimitiveInteger(atts.getValue(ALTITUDE_VALUE_ATT));
     }
 
     // RAZ

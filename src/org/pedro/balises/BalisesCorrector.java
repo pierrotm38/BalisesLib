@@ -134,15 +134,15 @@ public final class BalisesCorrector
           }
           else if (LATITUDE.equalsIgnoreCase(property))
           {
-            balise.latitude = Utils.parseDouble(value);
+            balise.latitude = Utils.parsePrimitiveDouble(value);
           }
           else if (LONGITUDE.equalsIgnoreCase(property))
           {
-            balise.longitude = Utils.parseDouble(value);
+            balise.longitude = Utils.parsePrimitiveDouble(value);
           }
           else if (ALTITUDE.equalsIgnoreCase(property))
           {
-            balise.altitude = Utils.parseInteger(value);
+            balise.altitude = Utils.parsePrimitiveInteger(value);
           }
           else if (COMMENTAIRE.equalsIgnoreCase(property))
           {
@@ -150,7 +150,7 @@ public final class BalisesCorrector
           }
           else if (ACTIVE.equalsIgnoreCase(property))
           {
-            balise.active = Boolean.valueOf(value);
+            balise.active = Utils.parsePrimitiveBoolean(value);
           }
         }
       }

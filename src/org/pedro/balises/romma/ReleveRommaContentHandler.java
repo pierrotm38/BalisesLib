@@ -119,18 +119,18 @@ public final class ReleveRommaContentHandler implements ContentHandler
 
       else if (VITESSE_MOY_TAG.equals(finalName))
       {
-        releve.ventMoyen = (STRING_MOINS_MOINS.equals(currentString) ? null : Utils.parseDouble(currentString));
+        releve.ventMoyen = (STRING_MOINS_MOINS.equals(currentString) ? Double.NaN : Utils.parsePrimitiveDouble(currentString));
       }
 
       else if (DIRECTION_TAG.equals(finalName))
       {
         final int direction = parseDirection(currentString);
-        releve.directionMoyenne = (direction < 0 ? null : Integer.valueOf(direction));
+        releve.directionMoyenne = (direction < 0 ? Integer.MIN_VALUE : direction);
       }
 
       else if (TEMPERATURE_TAG.equals(finalName))
       {
-        releve.temperature = (STRING_MOINS_MOINS.equals(currentString) ? null : Utils.parseDouble(currentString));
+        releve.temperature = (STRING_MOINS_MOINS.equals(currentString) ? Double.NaN : Utils.parsePrimitiveDouble(currentString));
       }
     }
     catch (final ParseException pe)

@@ -103,42 +103,42 @@ public final class ReleveFfvlContentHandler implements ContentHandler
 
       else if (VITESSE_MOY_TAG.equals(finalName))
       {
-        releve.ventMoyen = Utils.parseDouble(currentString);
+        releve.ventMoyen = Utils.parsePrimitiveDouble(currentString);
       }
 
       else if (VITESSE_MAX_TAG.equals(finalName))
       {
-        releve.ventMaxi = Utils.parseDouble(currentString);
+        releve.ventMaxi = Utils.parsePrimitiveDouble(currentString);
       }
 
       else if (VITESSE_MIN_TAG.equals(finalName))
       {
-        releve.ventMini = Utils.parseDouble(currentString);
+        releve.ventMini = Utils.parsePrimitiveDouble(currentString);
       }
 
       else if (DIRECTION_MOY_TAG.equals(finalName))
       {
-        releve.directionMoyenne = Utils.parseInteger(currentString);
+        releve.directionMoyenne = Utils.parsePrimitiveInteger(currentString);
       }
 
       else if (DIRECTION_INST_TAG.equals(finalName))
       {
-        releve.directionInstantanee = Utils.parseInteger(currentString);
+        releve.directionInstantanee = Utils.parsePrimitiveInteger(currentString);
       }
 
       else if (TEMPERATURE_TAG.equals(finalName))
       {
-        releve.temperature = Utils.parseDouble(currentString);
+        releve.temperature = Utils.parsePrimitiveDouble(currentString);
       }
 
       else if (HYDROMETRIE_TAG.equals(finalName))
       {
-        releve.hydrometrie = Utils.parseDouble(currentString);
+        releve.hydrometrie = Utils.parsePrimitiveDouble(currentString);
       }
 
       else if (PRESSION_TAG.equals(finalName))
       {
-        releve.pression = Utils.parseDouble(currentString);
+        releve.pression = Utils.parsePrimitiveDouble(currentString);
       }
 
       else if (LUMINOSITE_TAG.equals(finalName))

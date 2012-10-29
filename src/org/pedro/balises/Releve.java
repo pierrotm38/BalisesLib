@@ -38,34 +38,34 @@ import org.pedro.saveable.SaveableUtils;
  */
 public class Releve implements Serializable, Saveable
 {
-  private static final long serialVersionUID = 2997319509019353515L;
+  private static final long serialVersionUID        = 2997319509019353515L;
 
-  public static final int   PLUIE_AUCUNE     = 0;
-  public static final int   PLUIE_FAIBLE     = 1;
-  public static final int   PLUIE_MOYENNE    = 2;
-  public static final int   PLUIE_FORTE      = 3;
-  public static final int   PLUIE_TRES_FORTE = 4;
+  public static final int   PLUIE_AUCUNE            = 0;
+  public static final int   PLUIE_FAIBLE            = 1;
+  public static final int   PLUIE_MOYENNE           = 2;
+  public static final int   PLUIE_FORTE             = 3;
+  public static final int   PLUIE_TRES_FORTE        = 4;
 
   public String             id;
   public Date               date;
-  public Double             ventMoyen;
-  public Double             ventMini;
-  public Double             ventMaxi;
+  public double             ventMoyen               = Double.NaN;
+  public double             ventMini                = Double.NaN;
+  public double             ventMaxi                = Double.NaN;
   public Date               dateHeureVentMaxi;
-  public Integer            directionMoyenne;
-  public Integer            directionInstantanee;
-  public Integer            directionVentVariation1;
-  public Integer            directionVentVariation2;
-  public Double             temperature;
-  public Double             pointRosee;
-  public Integer            pluie;                                  // 0:aucune, 1:pluie faible, 2:pluie, 3:pluie forte, 4:deluge/orage
-  public Double             hydrometrie;
-  public Integer            nuages;                                 // En 8emes
-  public Integer            plafondNuages;
-  public Boolean            nuagesBourgeonnants;
-  public Double             pression;
+  public int                directionMoyenne        = Integer.MIN_VALUE;
+  public int                directionInstantanee    = Integer.MIN_VALUE;
+  public int                directionVentVariation1 = Integer.MIN_VALUE;
+  public int                directionVentVariation2 = Integer.MIN_VALUE;
+  public double             temperature             = Double.NaN;
+  public double             pointRosee              = Double.NaN;
+  public int                pluie                   = Integer.MIN_VALUE;   // 0:aucune, 1:pluie faible, 2:pluie, 3:pluie forte, 4:deluge/orage
+  public double             hydrometrie             = Double.NaN;
+  public int                nuages                  = Integer.MIN_VALUE;   // En 8emes
+  public int                plafondNuages           = Integer.MIN_VALUE;
+  public int                nuagesBourgeonnants     = Utils.BOOLEAN_NULL;
+  public double             pression                = Double.NaN;
   public String             luminosite;
-  public Integer            humidite;
+  public int                humidite                = Integer.MIN_VALUE;
 
   private int               hashCode;
 
@@ -84,24 +84,24 @@ public class Releve implements Serializable, Saveable
     calculateHashCode();
 
     date = SaveableUtils.readDate(in);
-    ventMoyen = SaveableUtils.readDouble(in);
-    ventMini = SaveableUtils.readDouble(in);
-    ventMaxi = SaveableUtils.readDouble(in);
+    ventMoyen = in.readDouble();
+    ventMini = in.readDouble();
+    ventMaxi = in.readDouble();
     dateHeureVentMaxi = SaveableUtils.readDate(in);
-    directionMoyenne = SaveableUtils.readInteger(in);
-    directionInstantanee = SaveableUtils.readInteger(in);
-    directionVentVariation1 = SaveableUtils.readInteger(in);
-    directionVentVariation2 = SaveableUtils.readInteger(in);
-    temperature = SaveableUtils.readDouble(in);
-    pointRosee = SaveableUtils.readDouble(in);
-    pluie = SaveableUtils.readInteger(in);
-    nuages = SaveableUtils.readInteger(in);
-    plafondNuages = SaveableUtils.readInteger(in);
-    nuagesBourgeonnants = SaveableUtils.readBoolean(in);
-    hydrometrie = SaveableUtils.readDouble(in);
-    pression = SaveableUtils.readDouble(in);
+    directionMoyenne = in.readInt();
+    directionInstantanee = in.readInt();
+    directionVentVariation1 = in.readInt();
+    directionVentVariation2 = in.readInt();
+    temperature = in.readDouble();
+    pointRosee = in.readDouble();
+    pluie = in.readInt();
+    nuages = in.readInt();
+    plafondNuages = in.readInt();
+    nuagesBourgeonnants = in.readInt();
+    hydrometrie = in.readDouble();
+    pression = in.readDouble();
     luminosite = SaveableUtils.readString(in);
-    humidite = SaveableUtils.readInteger(in);
+    humidite = in.readInt();
   }
 
   @Override
@@ -110,24 +110,24 @@ public class Releve implements Serializable, Saveable
     SaveableUtils.saveSerialUID(out, this);
     SaveableUtils.writeString(out, id);
     SaveableUtils.writeDate(out, date);
-    SaveableUtils.writeDouble(out, ventMoyen);
-    SaveableUtils.writeDouble(out, ventMini);
-    SaveableUtils.writeDouble(out, ventMaxi);
+    out.writeDouble(ventMoyen);
+    out.writeDouble(ventMini);
+    out.writeDouble(ventMaxi);
     SaveableUtils.writeDate(out, dateHeureVentMaxi);
-    SaveableUtils.writeInteger(out, directionMoyenne);
-    SaveableUtils.writeInteger(out, directionInstantanee);
-    SaveableUtils.writeInteger(out, directionVentVariation1);
-    SaveableUtils.writeInteger(out, directionVentVariation2);
-    SaveableUtils.writeDouble(out, temperature);
-    SaveableUtils.writeDouble(out, pointRosee);
-    SaveableUtils.writeInteger(out, pluie);
-    SaveableUtils.writeInteger(out, nuages);
-    SaveableUtils.writeInteger(out, plafondNuages);
-    SaveableUtils.writeBoolean(out, nuagesBourgeonnants);
-    SaveableUtils.writeDouble(out, hydrometrie);
-    SaveableUtils.writeDouble(out, pression);
+    out.writeInt(directionMoyenne);
+    out.writeInt(directionInstantanee);
+    out.writeInt(directionVentVariation1);
+    out.writeInt(directionVentVariation2);
+    out.writeDouble(temperature);
+    out.writeDouble(pointRosee);
+    out.writeInt(pluie);
+    out.writeInt(nuages);
+    out.writeInt(plafondNuages);
+    out.writeInt(nuagesBourgeonnants);
+    out.writeDouble(hydrometrie);
+    out.writeDouble(pression);
     SaveableUtils.writeString(out, luminosite);
-    SaveableUtils.writeInteger(out, humidite);
+    out.writeInt(humidite);
   }
 
   @Override
