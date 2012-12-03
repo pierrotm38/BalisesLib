@@ -142,7 +142,7 @@ public abstract class AbstractBaliseProvider implements BaliseProvider
       {
         updated = true;
       }
-      // Ancien releve, comparaison de la date et calcul des tendances
+      // Ancien releve existant, comparaison de la date et calcul des tendances
       else
       {
         // Comparaison date
@@ -174,8 +174,8 @@ public abstract class AbstractBaliseProvider implements BaliseProvider
       if (updated)
       {
         updatedReleves.put(entry.getKey(), nouveau);
+        releves.put(entry.getKey(), nouveau);
       }
-      releves.put(entry.getKey(), nouveau);
     }
   }
 
