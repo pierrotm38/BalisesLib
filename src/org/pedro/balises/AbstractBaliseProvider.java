@@ -119,50 +119,63 @@ public abstract class AbstractBaliseProvider implements BaliseProvider
    */
   protected final void refreshReleves(final Map<String, Releve> newReleves)
   {
-    // Detection des releves mis a jour
-    findUpdatedReleves(newReleves);
-
-    // On conserve les anciens (seuls ceux mis a jour sont ecrases)
-    releves.putAll(newReleves);
-  }
-
-  /**
-   * 
-   * @param newReleves
-   */
-  private void findUpdatedReleves(final Map<String, Releve> newReleves)
-  {
     // Initialisation
     updatedReleves.clear();
 
-    // Seulement si les anciens releves sont presents
-    if (releves != null)
+    // Si les anciens releves n'existent pas
+    if (releves == null)
     {
-      for (final Entry<String, Releve> entry : newReleves.entrySet())
+      releves = newReleves;
+      return;
+    }
+
+    // Seulement si les anciens releves sont presents
+    for (final Entry<String, Releve> entry : newReleves.entrySet())
+    {
+      // Recherche dans les anciens
+      final Releve nouveau = entry.getValue();
+      final Releve ancien = releves.get(entry.getKey());
+      final boolean updated;
+
+      // Nouveau releve
+      if (ancien == null)
       {
-        // Recherche dans les anciens
-        final Releve ancien = releves.get(entry.getKey());
-        final boolean updated;
+        updated = true;
+      }
+      // Ancien releve, comparaison de la date et calcul des tendances
+      else
+      {
+        // Comparaison date
+        final long newStamp = (nouveau.date == null ? -1 : nouveau.date.getTime());
+        final long oldStamp = (ancien.date == null ? -1 : ancien.date.getTime());
+        updated = (newStamp > oldStamp);
 
-        // Nouveau releve
-        if (ancien == null)
+        // Calcul des tendances
+        if (updated && (nouveau.date != null) && (ancien.date != null))
         {
-          updated = true;
-        }
-        // Ancien releve, comparaison de la date
-        else
-        {
-          final long newStamp = (entry.getValue().date == null ? -1 : entry.getValue().date.getTime());
-          final long oldStamp = (ancien.date == null ? -1 : ancien.date.getTime());
-          updated = (newStamp > oldStamp);
-        }
+          // Anciennete
+          nouveau.dateRelevePrecedent = ancien.date;
 
-        // Sauvegarde
-        if (updated)
-        {
-          updatedReleves.put(entry.getKey(), entry.getValue());
+          // Vent moyen
+          if (!Double.isNaN(nouveau.ventMoyen) && !Double.isNaN(ancien.ventMoyen))
+          {
+            nouveau.ventMoyenTendance = nouveau.ventMoyen - ancien.ventMoyen;
+          }
+
+          // Vent maxi
+          if (!Double.isNaN(nouveau.ventMaxi) && !Double.isNaN(ancien.ventMaxi))
+          {
+            nouveau.ventMaxiTendance = nouveau.ventMaxi - ancien.ventMaxi;
+          }
         }
       }
+
+      // Sauvegarde
+      if (updated)
+      {
+        updatedReleves.put(entry.getKey(), nouveau);
+      }
+      releves.put(entry.getKey(), nouveau);
     }
   }
 

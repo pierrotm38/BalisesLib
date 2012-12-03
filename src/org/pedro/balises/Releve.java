@@ -38,7 +38,7 @@ import org.pedro.saveable.SaveableUtils;
  */
 public class Releve implements Serializable, Saveable
 {
-  private static final long serialVersionUID        = 2997319509019353515L;
+  private static final long serialVersionUID        = 179670899197547406L;
 
   public static final int   PLUIE_AUCUNE            = 0;
   public static final int   PLUIE_FAIBLE            = 1;
@@ -48,9 +48,12 @@ public class Releve implements Serializable, Saveable
 
   public String             id;
   public Date               date;
+  public Date               dateRelevePrecedent;
   public double             ventMoyen               = Double.NaN;
+  public double             ventMoyenTendance       = Double.NaN;
   public double             ventMini                = Double.NaN;
   public double             ventMaxi                = Double.NaN;
+  public double             ventMaxiTendance        = Double.NaN;
   public Date               dateHeureVentMaxi;
   public int                directionMoyenne        = Integer.MIN_VALUE;
   public int                directionInstantanee    = Integer.MIN_VALUE;
@@ -58,9 +61,9 @@ public class Releve implements Serializable, Saveable
   public int                directionVentVariation2 = Integer.MIN_VALUE;
   public double             temperature             = Double.NaN;
   public double             pointRosee              = Double.NaN;
-  public int                pluie                   = Integer.MIN_VALUE;   // 0:aucune, 1:pluie faible, 2:pluie, 3:pluie forte, 4:deluge/orage
+  public int                pluie                   = Integer.MIN_VALUE;  // 0:aucune, 1:pluie faible, 2:pluie, 3:pluie forte, 4:deluge/orage
   public double             hydrometrie             = Double.NaN;
-  public int                nuages                  = Integer.MIN_VALUE;   // En 8emes
+  public int                nuages                  = Integer.MIN_VALUE;  // En 8emes
   public int                plafondNuages           = Integer.MIN_VALUE;
   public int                nuagesBourgeonnants     = Utils.BOOLEAN_NULL;
   public double             pression                = Double.NaN;
@@ -84,9 +87,12 @@ public class Releve implements Serializable, Saveable
     calculateHashCode();
 
     date = SaveableUtils.readDate(in);
+    dateRelevePrecedent = SaveableUtils.readDate(in);
     ventMoyen = in.readDouble();
+    ventMoyenTendance = in.readDouble();
     ventMini = in.readDouble();
     ventMaxi = in.readDouble();
+    ventMaxiTendance = in.readDouble();
     dateHeureVentMaxi = SaveableUtils.readDate(in);
     directionMoyenne = in.readInt();
     directionInstantanee = in.readInt();
@@ -110,9 +116,12 @@ public class Releve implements Serializable, Saveable
     SaveableUtils.saveSerialUID(out, this);
     SaveableUtils.writeString(out, id);
     SaveableUtils.writeDate(out, date);
+    SaveableUtils.writeDate(out, dateRelevePrecedent);
     out.writeDouble(ventMoyen);
+    out.writeDouble(ventMoyenTendance);
     out.writeDouble(ventMini);
     out.writeDouble(ventMaxi);
+    out.writeDouble(ventMaxiTendance);
     SaveableUtils.writeDate(out, dateHeureVentMaxi);
     out.writeInt(directionMoyenne);
     out.writeInt(directionInstantanee);
@@ -133,9 +142,9 @@ public class Releve implements Serializable, Saveable
   @Override
   public String toString()
   {
-    return "id=" + id + ", date=" + date + ", moy=" + ventMoyen + ", maxi=" + ventMaxi + ", dateHeureVentMaxi=" + dateHeureVentMaxi + ", mini=" + ventMini + ", dirMoy=" + directionMoyenne + ", dirInst=" + directionInstantanee
-        + ", dirVar1=" + directionVentVariation1 + ", dirVar2=" + directionVentVariation2 + ", temp=" + temperature + ", rosee=" + pointRosee + ", pluie=" + pluie + ", nuages=" + nuages + ", plafondNuages=" + plafondNuages + ", cum/cb="
-        + nuagesBourgeonnants + ", hydro=" + hydrometrie + ", pression=" + pression;
+    return "id=" + id + ", date=" + date + ", dateRelPrec=" + dateRelevePrecedent + ", moy=" + ventMoyen + ", moyTend=" + ventMoyenTendance + ", maxi=" + ventMaxi + ", maxiTend=" + ventMaxiTendance + ", dateHeureVentMaxi="
+        + dateHeureVentMaxi + ", mini=" + ventMini + ", dirMoy=" + directionMoyenne + ", dirInst=" + directionInstantanee + ", dirVar1=" + directionVentVariation1 + ", dirVar2=" + directionVentVariation2 + ", temp=" + temperature
+        + ", rosee=" + pointRosee + ", pluie=" + pluie + ", nuages=" + nuages + ", plafondNuages=" + plafondNuages + ", cum/cb=" + nuagesBourgeonnants + ", hydro=" + hydrometrie + ", pression=" + pression;
   }
 
   /**
