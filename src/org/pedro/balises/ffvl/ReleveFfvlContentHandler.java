@@ -38,7 +38,7 @@ import org.xml.sax.SAXException;
  * 
  * @author pedro.m
  */
-public final class ReleveFfvlContentHandler implements ContentHandler
+public class ReleveFfvlContentHandler implements ContentHandler
 {
   // Constantes
   private static final String       STRING_VIDE        = "";
@@ -57,8 +57,8 @@ public final class ReleveFfvlContentHandler implements ContentHandler
 
   // Membres
   private final Map<String, Releve> releves            = new HashMap<String, Releve>();
-  private Releve                    releve;
-  private String                    currentString      = STRING_VIDE;
+  protected Releve                  releve;
+  protected String                  currentString      = STRING_VIDE;
 
   /**
    * Recuperation de la liste des balises

@@ -51,9 +51,9 @@ import org.xml.sax.XMLReader;
  * 
  * @author pedro.m
  */
-public final class FfvlProvider extends AbstractBaliseProvider
+public class FfvlProvider extends AbstractBaliseProvider
 {
-  private static final String                URL_FFVL_KEY            = "ffvlKey";
+  protected static final String              URL_FFVL_KEY            = "ffvlKey";
   public static final String                 URL_FFVL_KEY_GROUP      = "\\{" + URL_FFVL_KEY + "\\}";
 
   //private static final String                URL_BALISES             = "file:C:/Temp/balise_list.xml";
@@ -62,7 +62,7 @@ public final class FfvlProvider extends AbstractBaliseProvider
 
   //private static final String                URL_RELEVES             = "file:C:/Temp/relevemeteo-20110721.xml";
   //private static final String                URL_RELEVES             = "http://www.balisemeteo.com/xml/{" + URL_FFVL_KEY + "}/relevemeteo.xml";
-  private static final String                URL_RELEVES             = "http://data.ffvl.fr/xml/{" + URL_FFVL_KEY + "}/meteo/relevemeteo.xml";
+  protected static final String              URL_RELEVES             = "http://data.ffvl.fr/xml/{" + URL_FFVL_KEY + "}/meteo/relevemeteo.xml";
 
   public static final String                 URL_LAST_UPDATE         = "http://data.ffvl.fr/xml/{" + URL_FFVL_KEY + "}/lastupdate.xml";
 
@@ -87,12 +87,12 @@ public final class FfvlProvider extends AbstractBaliseProvider
   private final ReleveFfvlContentHandler     releveHandler;
   private final LastUpdateFfvlContentHandler lastUpdateHandler;
 
-  private final String                       ffvlKey;
+  protected final String                     ffvlKey;
   private final boolean                      useZippedData;
 
   private boolean                            balisesUpdateDateCalled = false;
   private boolean                            lastUpdateUpdateDatesReturn;
-  private final Map<String, Long>            updateDates             = new HashMap<String, Long>();
+  protected final Map<String, Long>          updateDates             = new HashMap<String, Long>();
 
   /**
    * 
@@ -175,7 +175,7 @@ public final class FfvlProvider extends AbstractBaliseProvider
    * @return
    * @throws IOException
    */
-  private boolean updateUpdateDates() throws IOException
+  protected boolean updateUpdateDates() throws IOException
   {
     // Initialisations
     boolean updated = false;
@@ -209,7 +209,7 @@ public final class FfvlProvider extends AbstractBaliseProvider
    * @return
    * @throws IOException
    */
-  private Map<String, Long> parseUpdateDatesMap(final InputSource source) throws IOException
+  protected Map<String, Long> parseUpdateDatesMap(final InputSource source) throws IOException
   {
     try
     {
@@ -405,7 +405,7 @@ public final class FfvlProvider extends AbstractBaliseProvider
    * @return
    * @throws IOException
    */
-  private Map<String, Releve> parseRelevesMap(final InputSource source) throws IOException
+  protected Map<String, Releve> parseRelevesMap(final InputSource source) throws IOException
   {
     try
     {

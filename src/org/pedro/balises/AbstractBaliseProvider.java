@@ -153,19 +153,27 @@ public abstract class AbstractBaliseProvider implements BaliseProvider
         // Calcul des tendances
         if (updated && (nouveau.date != null) && (ancien.date != null))
         {
-          // Anciennete
-          nouveau.dateRelevePrecedent = ancien.date;
+          // Date releve precedent fournie par le serveur
+          final long prevStamp = (nouveau.dateRelevePrecedent == null ? -1 : nouveau.dateRelevePrecedent.getTime());
 
-          // Vent moyen
-          if (!Double.isNaN(nouveau.ventMoyen) && !Double.isNaN(ancien.ventMoyen))
+          // Si les anciennes donnees locales sont plus fraiches que les anciennes donnees du serveur => calcul des tendances
+          // Sinon on ne touche pas aux tendances fournies par le serveur
+          if (oldStamp > prevStamp)
           {
-            nouveau.ventMoyenTendance = nouveau.ventMoyen - ancien.ventMoyen;
-          }
+            // Anciennete
+            nouveau.dateRelevePrecedent = ancien.date;
 
-          // Vent maxi
-          if (!Double.isNaN(nouveau.ventMaxi) && !Double.isNaN(ancien.ventMaxi))
-          {
-            nouveau.ventMaxiTendance = nouveau.ventMaxi - ancien.ventMaxi;
+            // Vent moyen
+            if (!Double.isNaN(nouveau.ventMoyen) && !Double.isNaN(ancien.ventMoyen))
+            {
+              nouveau.ventMoyenTendance = nouveau.ventMoyen - ancien.ventMoyen;
+            }
+
+            // Vent maxi
+            if (!Double.isNaN(nouveau.ventMaxi) && !Double.isNaN(ancien.ventMaxi))
+            {
+              nouveau.ventMaxiTendance = nouveau.ventMaxi - ancien.ventMaxi;
+            }
           }
         }
       }
