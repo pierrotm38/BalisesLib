@@ -210,4 +210,10 @@ public abstract class AbstractBaliseProvider implements BaliseProvider
   {
     return updatedReleves.values();
   }
+
+  @Override
+  public Class<? extends BaliseProvider> getBaliseProviderClass()
+  {
+    return getClass();
+  }
 }

@@ -160,4 +160,10 @@ public interface BaliseProvider
    * @return
    */
   public Collection<Releve> getUpdatedReleves();
+
+  /**
+   * 
+   * @return
+   */
+  public Class<? extends BaliseProvider> getBaliseProviderClass();
 }
