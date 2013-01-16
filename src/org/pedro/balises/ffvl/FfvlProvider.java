@@ -84,7 +84,7 @@ public class FfvlProvider extends AbstractBaliseProvider
   private final SAXParserFactory             factory;
   private final SAXParser                    parser;
   private final BaliseFfvlContentHandler     baliseHandler;
-  private final ReleveFfvlContentHandler     releveHandler;
+  protected final ReleveFfvlContentHandler   releveHandler;
   private final LastUpdateFfvlContentHandler lastUpdateHandler;
 
   protected final String                     ffvlKey;
@@ -111,6 +111,19 @@ public class FfvlProvider extends AbstractBaliseProvider
    */
   public FfvlProvider(final String name, final String country, final String ffvlKey, final boolean useZippedData)
   {
+    this(name, country, ffvlKey, useZippedData, new ReleveFfvlContentHandler());
+  }
+
+  /**
+   * 
+   * @param name
+   * @param country
+   * @param ffvlKey
+   * @param useZippedData
+   * @param releveHandler
+   */
+  protected FfvlProvider(final String name, final String country, final String ffvlKey, final boolean useZippedData, final ReleveFfvlContentHandler releveHandler)
+  {
     // Initialisation
     super(name, country, null, 150);
     this.ffvlKey = ffvlKey;
@@ -122,7 +135,7 @@ public class FfvlProvider extends AbstractBaliseProvider
       factory = SAXParserFactory.newInstance();
       parser = factory.newSAXParser();
       baliseHandler = new BaliseFfvlContentHandler();
-      releveHandler = new ReleveFfvlContentHandler();
+      this.releveHandler = releveHandler;
       lastUpdateHandler = new LastUpdateFfvlContentHandler();
     }
     catch (final SAXException se)
