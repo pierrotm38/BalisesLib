@@ -293,6 +293,15 @@ public class CachedProvider implements BaliseProvider
   @Override
   public Class<? extends BaliseProvider> getBaliseProviderClass()
   {
-    return provider.getClass();
+    return provider.getBaliseProviderClass();
+  }
+
+  /**
+   * 
+   * @return
+   */
+  public BaliseProvider getOriginalBaliseProvider()
+  {
+    return provider;
   }
 }
