@@ -214,7 +214,7 @@ public abstract class Utils
       return null;
     }
 
-    return new Integer(Integer.parseInt(text, 10));
+    return Integer.valueOf(text, 10);
   }
 
   /**
@@ -244,7 +244,7 @@ public abstract class Utils
       return null;
     }
 
-    return new Double(Double.parseDouble(text));
+    return Double.valueOf(text);
   }
 
   /**

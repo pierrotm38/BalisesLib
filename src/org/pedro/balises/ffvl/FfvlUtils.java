@@ -78,7 +78,7 @@ public abstract class FfvlUtils
       final double secondes = Double.parseDouble(cleanDouble(matcher.group(3)));
       final int signe = NORD.equalsIgnoreCase(matcher.group(4)) ? 1 : -1;
 
-      retour = new Double(signe * Utils.degresMinutesSecondesToFraction(degres, minutes, secondes));
+      retour = Double.valueOf(signe * Utils.degresMinutesSecondesToFraction(degres, minutes, secondes));
     }
     else
     {
@@ -97,7 +97,7 @@ public abstract class FfvlUtils
           final double degres = Double.parseDouble(cleanDouble(semiDecimalMatcher.group(2)));
           final double minutes = Double.parseDouble(cleanDouble(semiDecimalMatcher.group(3)));
 
-          retour = new Double(signe * Utils.degresMinutesToFraction(degres, minutes));
+          retour = Double.valueOf(signe * Utils.degresMinutesToFraction(degres, minutes));
         }
       }
     }
@@ -124,7 +124,7 @@ public abstract class FfvlUtils
       final double secondes = Double.parseDouble(cleanDouble(matcher.group(7)));
       final int signe = EST.equalsIgnoreCase(matcher.group(8)) ? 1 : -1;
 
-      retour = new Double(signe * Utils.degresMinutesSecondesToFraction(degres, minutes, secondes));
+      retour = Double.valueOf(signe * Utils.degresMinutesSecondesToFraction(degres, minutes, secondes));
     }
     else
     {
@@ -143,7 +143,7 @@ public abstract class FfvlUtils
           final double degres = Double.parseDouble(cleanDouble(semiDecimalMatcher.group(5)));
           final double minutes = Double.parseDouble(cleanDouble(semiDecimalMatcher.group(6)));
 
-          retour = new Double(signe * Utils.degresMinutesToFraction(degres, minutes));
+          retour = Double.valueOf(signe * Utils.degresMinutesToFraction(degres, minutes));
         }
       }
     }
