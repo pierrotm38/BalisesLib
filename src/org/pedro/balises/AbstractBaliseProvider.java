@@ -163,6 +163,12 @@ public abstract class AbstractBaliseProvider implements BaliseProvider
             // Anciennete
             nouveau.dateRelevePrecedent = ancien.date;
 
+            // Vent mini
+            if (!Double.isNaN(nouveau.ventMini) && !Double.isNaN(ancien.ventMini))
+            {
+              nouveau.ventMiniTendance = nouveau.ventMini - ancien.ventMini;
+            }
+
             // Vent moyen
             if (!Double.isNaN(nouveau.ventMoyen) && !Double.isNaN(ancien.ventMoyen))
             {

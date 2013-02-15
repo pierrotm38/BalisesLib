@@ -98,7 +98,10 @@ public class ReleveFfvlContentHandler implements ContentHandler
         releve.date = FfvlUtils.parseDate(currentString);
 
         // Decalage dans le fuseau horaire UTC
-        Utils.toUTC(releve.date, FfvlProvider.sourceTimeZone);
+        if (releve.date != null)
+        {
+          Utils.toUTC(releve.date, FfvlProvider.sourceTimeZone);
+        }
       }
 
       else if (VITESSE_MOY_TAG.equals(finalName))

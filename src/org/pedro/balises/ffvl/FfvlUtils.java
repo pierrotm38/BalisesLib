@@ -159,6 +159,11 @@ public abstract class FfvlUtils
    */
   public static Date parseDate(final String text) throws ParseException
   {
+    if (Utils.isStringVide(text))
+    {
+      return null;
+    }
+
     return DATE_FORMAT.parse(text);
   }
 }

@@ -38,7 +38,7 @@ import org.pedro.saveable.SaveableUtils;
  */
 public class Releve implements Serializable, Saveable
 {
-  private static final long serialVersionUID        = 179670899197547406L;
+  private static final long serialVersionUID        = 179670899197547407L;
 
   public static final int   PLUIE_AUCUNE            = 0;
   public static final int   PLUIE_FAIBLE            = 1;
@@ -52,6 +52,7 @@ public class Releve implements Serializable, Saveable
   public double             ventMoyen               = Double.NaN;
   public double             ventMoyenTendance       = Double.NaN;
   public double             ventMini                = Double.NaN;
+  public double             ventMiniTendance        = Double.NaN;
   public double             ventMaxi                = Double.NaN;
   public double             ventMaxiTendance        = Double.NaN;
   public Date               dateHeureVentMaxi;
@@ -91,6 +92,7 @@ public class Releve implements Serializable, Saveable
     ventMoyen = in.readDouble();
     ventMoyenTendance = in.readDouble();
     ventMini = in.readDouble();
+    ventMiniTendance = in.readDouble();
     ventMaxi = in.readDouble();
     ventMaxiTendance = in.readDouble();
     dateHeureVentMaxi = SaveableUtils.readDate(in);
@@ -120,6 +122,7 @@ public class Releve implements Serializable, Saveable
     out.writeDouble(ventMoyen);
     out.writeDouble(ventMoyenTendance);
     out.writeDouble(ventMini);
+    out.writeDouble(ventMiniTendance);
     out.writeDouble(ventMaxi);
     out.writeDouble(ventMaxiTendance);
     SaveableUtils.writeDate(out, dateHeureVentMaxi);
@@ -143,8 +146,8 @@ public class Releve implements Serializable, Saveable
   public String toString()
   {
     return "id=" + id + ", date=" + date + ", dateRelPrec=" + dateRelevePrecedent + ", moy=" + ventMoyen + ", moyTend=" + ventMoyenTendance + ", maxi=" + ventMaxi + ", maxiTend=" + ventMaxiTendance + ", dateHeureVentMaxi="
-        + dateHeureVentMaxi + ", mini=" + ventMini + ", dirMoy=" + directionMoyenne + ", dirInst=" + directionInstantanee + ", dirVar1=" + directionVentVariation1 + ", dirVar2=" + directionVentVariation2 + ", temp=" + temperature
-        + ", rosee=" + pointRosee + ", pluie=" + pluie + ", nuages=" + nuages + ", plafondNuages=" + plafondNuages + ", cum/cb=" + nuagesBourgeonnants + ", hydro=" + hydrometrie + ", pression=" + pression;
+        + dateHeureVentMaxi + ", mini=" + ventMini + ", miniTend=" + ventMiniTendance + ", dirMoy=" + directionMoyenne + ", dirInst=" + directionInstantanee + ", dirVar1=" + directionVentVariation1 + ", dirVar2=" + directionVentVariation2
+        + ", temp=" + temperature + ", rosee=" + pointRosee + ", pluie=" + pluie + ", nuages=" + nuages + ", plafondNuages=" + plafondNuages + ", cum/cb=" + nuagesBourgeonnants + ", hydro=" + hydrometrie + ", pression=" + pression;
   }
 
   /**
