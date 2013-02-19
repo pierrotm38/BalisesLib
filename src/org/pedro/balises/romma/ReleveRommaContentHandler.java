@@ -40,7 +40,7 @@ import org.xml.sax.SAXException;
  * 
  * @author pedro.m
  */
-public final class ReleveRommaContentHandler implements ContentHandler
+public class ReleveRommaContentHandler implements ContentHandler
 {
   // Directions
   private static final String       DIR_N              = "N";
@@ -61,7 +61,7 @@ public final class ReleveRommaContentHandler implements ContentHandler
   private static final String       DIR_NNO            = "NNO";
 
   // Constantes
-  private static final String       STRING_MOINS_MOINS = "--";
+  protected static final String     STRING_MOINS_MOINS = "--";
   private static final String       STRING_VIDE        = "";
   private static final String       RELEVE_TAG         = "releve";
   private static final String       STATION_ID_TAG     = "stationID";
@@ -69,12 +69,12 @@ public final class ReleveRommaContentHandler implements ContentHandler
   private static final String       VITESSE_MOY_TAG    = "vitesseVentMoy10min";
   private static final String       DIRECTION_TAG      = "directionVentInst";
   private static final String       TEMPERATURE_TAG    = "temperature";
-  private static final DateFormat   RELEVE_DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+  protected static final DateFormat RELEVE_DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy HH:mm");
 
   // Membres
   private final Map<String, Releve> releves            = new HashMap<String, Releve>();
-  private Releve                    releve;
-  private String                    currentString      = STRING_VIDE;
+  protected Releve                  releve;
+  protected String                  currentString      = STRING_VIDE;
 
   /**
    * Recuperation de la liste des balises

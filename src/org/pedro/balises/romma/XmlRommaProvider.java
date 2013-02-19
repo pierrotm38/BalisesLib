@@ -50,10 +50,10 @@ import org.xml.sax.XMLReader;
  * 
  * @author pedro.m
  */
-public final class XmlRommaProvider extends AbstractBaliseProvider
+public class XmlRommaProvider extends AbstractBaliseProvider
 {
-  private static final String             URL_ROMMA_KEY           = "rommaKey";
-  private static final String             URL_ROMMA_KEY_GROUP     = "\\{" + URL_ROMMA_KEY + "\\}";
+  protected static final String           URL_ROMMA_KEY           = "rommaKey";
+  protected static final String           URL_ROMMA_KEY_GROUP     = "\\{" + URL_ROMMA_KEY + "\\}";
 
   //private static final String                URL_BALISES             = "file:C:/Temp/balise_list.xml";
   private static final String             URL_BALISES             = "http://www.romma.fr/stations_romma_xml.php?id={" + URL_ROMMA_KEY + "}";
@@ -79,7 +79,7 @@ public final class XmlRommaProvider extends AbstractBaliseProvider
   private final BaliseRommaContentHandler baliseHandler;
   private final ReleveRommaContentHandler releveHandler;
 
-  private final String                    rommaKey;
+  protected final String                  rommaKey;
   private final boolean                   useZippedData;
 
   /**
@@ -99,6 +99,19 @@ public final class XmlRommaProvider extends AbstractBaliseProvider
    */
   public XmlRommaProvider(final String name, final String country, final String rommaKey, final boolean useZippedData)
   {
+    this(name, country, rommaKey, useZippedData, new ReleveRommaContentHandler());
+  }
+
+  /**
+   * 
+   * @param name
+   * @param country
+   * @param rommaKey
+   * @param useZippedData
+   * @param releveHandler
+   */
+  protected XmlRommaProvider(final String name, final String country, final String rommaKey, final boolean useZippedData, final ReleveRommaContentHandler releveHandler)
+  {
     // Initialisation
     super(name, country, null, 150);
     this.rommaKey = rommaKey;
@@ -110,7 +123,7 @@ public final class XmlRommaProvider extends AbstractBaliseProvider
       factory = SAXParserFactory.newInstance();
       parser = factory.newSAXParser();
       baliseHandler = new BaliseRommaContentHandler();
-      releveHandler = new ReleveRommaContentHandler();
+      this.releveHandler = releveHandler;
     }
     catch (final SAXException se)
     {
@@ -162,11 +175,23 @@ public final class XmlRommaProvider extends AbstractBaliseProvider
    */
   private InputStream getUnzippedInputStream(final String url) throws IOException
   {
+    return getUnzippedInputStream(url, useZippedData);
+  }
+
+  /**
+   * 
+   * @param url
+   * @param inUseZippedData
+   * @return
+   * @throws IOException
+   */
+  public static InputStream getUnzippedInputStream(final String url, final boolean inUseZippedData) throws IOException
+  {
     // Initialisations
     InputStream retour = null;
 
     // Donnees compressees ou pas ?
-    if (useZippedData)
+    if (inUseZippedData)
     {
       final URLConnection cnx = new URL(url + SUFFIXE_COMPRESSION).openConnection();
       cnx.setConnectTimeout(Utils.CONNECT_TIMEOUT);
@@ -300,7 +325,7 @@ public final class XmlRommaProvider extends AbstractBaliseProvider
    * @return
    * @throws IOException
    */
-  private Map<String, Releve> parseRelevesMap(final InputSource source) throws IOException
+  protected Map<String, Releve> parseRelevesMap(final InputSource source) throws IOException
   {
     try
     {
