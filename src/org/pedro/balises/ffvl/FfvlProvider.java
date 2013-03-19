@@ -283,6 +283,7 @@ public class FfvlProvider extends AbstractBaliseProvider
     if (inUseZippedData)
     {
       final URLConnection cnx = new URL(url + SUFFIXE_COMPRESSION).openConnection();
+      cnx.setRequestProperty(REQUEST_PROPERTY_ACCEPT_ENCODING, REQUEST_PROPERTY_ACCEPT_ENCODING_IDENTITY);
       cnx.setConnectTimeout(Utils.CONNECT_TIMEOUT);
       cnx.setReadTimeout(Utils.READ_TIMEOUT);
       retour = new GZIPInputStream(cnx.getInputStream());

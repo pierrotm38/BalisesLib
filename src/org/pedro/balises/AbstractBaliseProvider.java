@@ -34,12 +34,15 @@ import java.util.Map.Entry;
  */
 public abstract class AbstractBaliseProvider implements BaliseProvider
 {
+  protected static final String     REQUEST_PROPERTY_ACCEPT_ENCODING          = "Accept-Encoding";
+  protected static final String     REQUEST_PROPERTY_ACCEPT_ENCODING_IDENTITY = "identity";
+
   private final String              name;
   protected final String            country;
   protected final String            region;
   private Map<String, Balise>       balises;
   private Map<String, Releve>       releves;
-  private final Map<String, Releve> updatedReleves = new HashMap<String, Releve>();
+  private final Map<String, Releve> updatedReleves                            = new HashMap<String, Releve>();
 
   /**
    * 

@@ -54,14 +54,17 @@ public class XmlRommaProvider extends AbstractBaliseProvider
 {
   protected static final String           URL_ROMMA_KEY           = "rommaKey";
   protected static final String           URL_ROMMA_KEY_GROUP     = "\\{" + URL_ROMMA_KEY + "\\}";
+  protected static final String           URL_GZIP_KEY            = "gzipKey";
+  protected static final String           URL_GZIP_KEY_GROUP      = "\\{" + URL_GZIP_KEY + "\\}";
 
   //private static final String                URL_BALISES             = "file:C:/Temp/balise_list.xml";
-  private static final String             URL_BALISES             = "http://www.romma.fr/stations_romma_xml.php?id={" + URL_ROMMA_KEY + "}";
+  private static final String             URL_BALISES             = "http://www.romma.fr/stations_romma_xml{" + URL_GZIP_KEY + "}.php?id={" + URL_ROMMA_KEY + "}";
 
   //private static final String                URL_RELEVES             = "file:C:/Temp/relevemeteo-20110721.xml";
-  private static final String             URL_RELEVES             = "http://www.romma.fr/releves_romma_xml.php?id={" + URL_ROMMA_KEY + "}";
+  private static final String             URL_RELEVES             = "http://www.romma.fr/releves_romma_xml{" + URL_GZIP_KEY + "}.php?id={" + URL_ROMMA_KEY + "}";
 
   private static final String             SUFFIXE_COMPRESSION     = ".gz";
+  private static final String             CHAINE_VIDE             = "";
 
   private static final String             URL_BALISE_ID_KEY       = "idBalise";
   private static final String             URL_BALISE_ID_KEY_GROUP = "\\{" + URL_BALISE_ID_KEY + "\\}";
@@ -142,7 +145,7 @@ public class XmlRommaProvider extends AbstractBaliseProvider
 
     try
     {
-      final String finalUrl = URL_BALISES.replaceAll(URL_ROMMA_KEY_GROUP, rommaKey);
+      final String finalUrl = URL_BALISES.replaceAll(URL_GZIP_KEY_GROUP, useZippedData ? SUFFIXE_COMPRESSION : CHAINE_VIDE).replaceAll(URL_ROMMA_KEY_GROUP, rommaKey);
       final URL url = new URL(finalUrl);
       final URLConnection cnx = url.openConnection();
       if (cnx != null)
@@ -193,14 +196,17 @@ public class XmlRommaProvider extends AbstractBaliseProvider
     // Donnees compressees ou pas ?
     if (inUseZippedData)
     {
-      final URLConnection cnx = new URL(url + SUFFIXE_COMPRESSION).openConnection();
+      final String finalUrl = url.replaceAll(URL_GZIP_KEY_GROUP, SUFFIXE_COMPRESSION);
+      final URLConnection cnx = new URL(finalUrl).openConnection();
+      cnx.setRequestProperty(REQUEST_PROPERTY_ACCEPT_ENCODING, REQUEST_PROPERTY_ACCEPT_ENCODING_IDENTITY);
       cnx.setConnectTimeout(Utils.CONNECT_TIMEOUT);
       cnx.setReadTimeout(Utils.READ_TIMEOUT);
       retour = new GZIPInputStream(cnx.getInputStream());
     }
     else
     {
-      final URLConnection cnx = new URL(url).openConnection();
+      final String finalUrl = url.replaceAll(URL_GZIP_KEY_GROUP, CHAINE_VIDE);
+      final URLConnection cnx = new URL(finalUrl).openConnection();
       cnx.setConnectTimeout(Utils.CONNECT_TIMEOUT);
       cnx.setReadTimeout(Utils.READ_TIMEOUT);
       retour = cnx.getInputStream();
