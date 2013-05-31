@@ -26,23 +26,22 @@ package org.pedro.balises;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
 /**
  * 
  * @author pedro.m
  */
-public abstract class AbstractBaliseProvider implements BaliseProvider
+public abstract class AbstractBaliseProvider implements BaliseProvider, ReleveParserListener
 {
-  protected static final String     REQUEST_PROPERTY_ACCEPT_ENCODING          = "Accept-Encoding";
-  protected static final String     REQUEST_PROPERTY_ACCEPT_ENCODING_IDENTITY = "identity";
+  protected static final String       REQUEST_PROPERTY_ACCEPT_ENCODING          = "Accept-Encoding";
+  protected static final String       REQUEST_PROPERTY_ACCEPT_ENCODING_IDENTITY = "identity";
 
-  private final String              name;
-  protected final String            country;
-  protected final String            region;
-  private Map<String, Balise>       balises;
-  private Map<String, Releve>       releves;
-  private final Map<String, Releve> updatedReleves                            = new HashMap<String, Releve>();
+  private final String                name;
+  protected final String              country;
+  protected final String              region;
+  private Map<String, Balise>         balises;
+  private Map<String, Releve>         releves;
+  protected final Map<String, Releve> updatedReleves                            = new HashMap<String, Releve>();
 
   /**
    * 
@@ -120,6 +119,7 @@ public abstract class AbstractBaliseProvider implements BaliseProvider
    * 
    * @param newReleves
    */
+  /* TODO
   protected final void refreshReleves(final Map<String, Releve> newReleves)
   {
     // Initialisation
@@ -192,6 +192,81 @@ public abstract class AbstractBaliseProvider implements BaliseProvider
       {
         updatedReleves.put(entry.getKey(), nouveau);
         releves.put(entry.getKey(), nouveau);
+      }
+    }
+  }
+  */
+
+  @Override
+  public void onReleveParsed(final Releve nouveau)
+  {
+    // Recherche dans les anciens
+    final Releve ancien = releves.get(nouveau.id);
+    final boolean updated;
+
+    // Nouveau releve
+    if (ancien == null)
+    {
+      updated = true;
+    }
+    // Ancien releve existant, comparaison de la date et calcul des tendances
+    else
+    {
+      // Comparaison date
+      final long newStamp = (nouveau.date == null ? -1 : nouveau.date.getTime());
+      final long oldStamp = (ancien.date == null ? -1 : ancien.date.getTime());
+      updated = (newStamp > oldStamp);
+
+      // Calcul des tendances
+      if (updated && (nouveau.date != null) && (ancien.date != null))
+      {
+        // Date releve precedent fournie par le serveur
+        final long prevStamp = (nouveau.dateRelevePrecedent == null ? -1 : nouveau.dateRelevePrecedent.getTime());
+
+        // Si les anciennes donnees locales sont plus fraiches que les anciennes donnees du serveur => calcul des tendances
+        // Sinon on ne touche pas aux tendances fournies par le serveur
+        if (oldStamp > prevStamp)
+        {
+          // Anciennete
+          nouveau.dateRelevePrecedent = ancien.date;
+
+          // Vent mini
+          if (!Double.isNaN(nouveau.ventMini) && !Double.isNaN(ancien.ventMini))
+          {
+            nouveau.ventMiniTendance = nouveau.ventMini - ancien.ventMini;
+          }
+
+          // Vent moyen
+          if (!Double.isNaN(nouveau.ventMoyen) && !Double.isNaN(ancien.ventMoyen))
+          {
+            nouveau.ventMoyenTendance = nouveau.ventMoyen - ancien.ventMoyen;
+          }
+
+          // Vent maxi
+          if (!Double.isNaN(nouveau.ventMaxi) && !Double.isNaN(ancien.ventMaxi))
+          {
+            nouveau.ventMaxiTendance = nouveau.ventMaxi - ancien.ventMaxi;
+          }
+        }
+      }
+    }
+
+    // Sauvegarde
+    if (updated)
+    {
+      // Allocation si besoin (le parser ne travaille que sur une seule instance de Releve !),
+      // si non on reprend l'ancienne instance
+      final Releve toSave = (ancien == null) ? newReleve() : ancien;
+
+      // Copie des valeurs
+      toSave.copyFrom(nouveau);
+
+      // Sauvegarde
+      updatedReleves.put(toSave.id, toSave);
+      if (ancien == null)
+      {
+        // Dans la table des releves (necessaire seulement si l'ancien releve n'existait pas)
+        releves.put(toSave.id, toSave);
       }
     }
   }

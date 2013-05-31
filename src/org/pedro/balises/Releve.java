@@ -72,6 +72,81 @@ public class Releve implements Serializable, Saveable
   public int                humidite                = Integer.MIN_VALUE;
 
   private int               hashCode;
+  
+  //TODO ?
+  @Override
+  public void finalize() throws Throwable
+  {
+    super.finalize();
+    System.out.println("Fin d'un releve : " + id);
+  }
+
+  /**
+   * 
+   */
+  public void clear()
+  {
+    id = null;
+    date = null;
+    dateRelevePrecedent = null;
+    ventMoyen = Double.NaN;
+    ventMoyenTendance = Double.NaN;
+    ventMini = Double.NaN;
+    ventMiniTendance = Double.NaN;
+    ventMaxi = Double.NaN;
+    ventMaxiTendance = Double.NaN;
+    dateHeureVentMaxi = null;
+    directionMoyenne = Integer.MIN_VALUE;
+    directionInstantanee = Integer.MIN_VALUE;
+    directionVentVariation1 = Integer.MIN_VALUE;
+    directionVentVariation2 = Integer.MIN_VALUE;
+    temperature = Double.NaN;
+    pointRosee = Double.NaN;
+    pluie = Integer.MIN_VALUE;
+    hydrometrie = Double.NaN;
+    nuages = Integer.MIN_VALUE;
+    plafondNuages = Integer.MIN_VALUE;
+    nuagesBourgeonnants = Utils.BOOLEAN_NULL;
+    pression = Double.NaN;
+    luminosite = null;
+    humidite = Integer.MIN_VALUE;
+
+    hashCode = 0;
+  }
+
+  /**
+   * 
+   * @param releve
+   */
+  public void copyFrom(final Releve releve)
+  {
+    id = releve.id;
+    date = releve.date;
+    dateRelevePrecedent = releve.dateRelevePrecedent;
+    ventMoyen = releve.ventMoyen;
+    ventMoyenTendance = releve.ventMoyenTendance;
+    ventMini = releve.ventMini;
+    ventMiniTendance = releve.ventMiniTendance;
+    ventMaxi = releve.ventMaxi;
+    ventMaxiTendance = releve.ventMaxiTendance;
+    dateHeureVentMaxi = releve.dateHeureVentMaxi;
+    directionMoyenne = releve.directionMoyenne;
+    directionInstantanee = releve.directionInstantanee;
+    directionVentVariation1 = releve.directionVentVariation1;
+    directionVentVariation2 = releve.directionVentVariation2;
+    temperature = releve.temperature;
+    pointRosee = releve.pointRosee;
+    pluie = releve.pluie;
+    hydrometrie = releve.hydrometrie;
+    nuages = releve.nuages;
+    plafondNuages = releve.plafondNuages;
+    nuagesBourgeonnants = releve.nuagesBourgeonnants;
+    pression = releve.pression;
+    luminosite = releve.luminosite;
+    humidite = releve.humidite;
+
+    hashCode = releve.hashCode;
+  }
 
   @Override
   public long getSerialUID()

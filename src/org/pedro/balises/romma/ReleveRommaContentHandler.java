@@ -26,10 +26,9 @@ package org.pedro.balises.romma;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.pedro.balises.Releve;
+import org.pedro.balises.ReleveParserListener;
 import org.pedro.balises.Utils;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
@@ -72,18 +71,17 @@ public class ReleveRommaContentHandler implements ContentHandler
   protected static final DateFormat RELEVE_DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy HH:mm");
 
   // Membres
-  private final Map<String, Releve> releves            = new HashMap<String, Releve>();
-  protected Releve                  releve;
+  protected final Releve            releve             = new Releve();
   protected String                  currentString      = STRING_VIDE;
+  protected ReleveParserListener    listener;
 
   /**
-   * Recuperation de la liste des balises
    * 
-   * @return
+   * @param listener
    */
-  public Map<String, Releve> getReleves()
+  protected void setListener(final ReleveParserListener listener)
   {
-    return releves;
+    this.listener = listener;
   }
 
   @Override
@@ -103,10 +101,14 @@ public class ReleveRommaContentHandler implements ContentHandler
 
     try
     {
-      if (STATION_ID_TAG.equals(finalName))
+      if (RELEVE_TAG.equals(finalName))
+      {
+        listener.onReleveParsed(releve);
+      }
+
+      else if (STATION_ID_TAG.equals(finalName))
       {
         releve.setId(currentString);
-        releves.put(currentString, releve);
       }
 
       else if (DATE_TAG.equals(finalName))
@@ -226,7 +228,6 @@ public class ReleveRommaContentHandler implements ContentHandler
   @Override
   public void startDocument() throws SAXException
   {
-    releves.clear();
     currentString = STRING_VIDE;
   }
 
@@ -241,7 +242,7 @@ public class ReleveRommaContentHandler implements ContentHandler
 
     if (RELEVE_TAG.equals(finalName))
     {
-      releve = new Releve();
+      releve.clear();
     }
 
     // RAZ

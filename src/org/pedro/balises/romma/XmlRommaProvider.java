@@ -127,6 +127,7 @@ public class XmlRommaProvider extends AbstractBaliseProvider
       parser = factory.newSAXParser();
       baliseHandler = new BaliseRommaContentHandler();
       this.releveHandler = releveHandler;
+      releveHandler.setListener(this);
     }
     catch (final SAXException se)
     {
@@ -301,18 +302,14 @@ public class XmlRommaProvider extends AbstractBaliseProvider
   public boolean updateReleves() throws IOException
   {
     // Initialisations
-    boolean updated = false;
     InputStream input = null;
 
     try
     {
+      updatedReleves.clear();
       final String finalUrl = URL_RELEVES.replaceAll(URL_ROMMA_KEY_GROUP, rommaKey);
       input = getUnzippedInputStream(finalUrl);
-      final Map<String, Releve> newReleves = parseRelevesMap(new InputSource(input));
-
-      // Tout est OK
-      refreshReleves(newReleves);
-      updated = true;
+      parseReleves(new InputSource(input));
     }
     finally
     {
@@ -322,16 +319,15 @@ public class XmlRommaProvider extends AbstractBaliseProvider
       }
     }
 
-    return updated;
+    return !updatedReleves.isEmpty();
   }
 
   /**
    * 
    * @param source
-   * @return
    * @throws IOException
    */
-  protected Map<String, Releve> parseRelevesMap(final InputSource source) throws IOException
+  protected void parseReleves(final InputSource source) throws IOException
   {
     try
     {
@@ -339,9 +335,6 @@ public class XmlRommaProvider extends AbstractBaliseProvider
       final XMLReader reader = parser.getXMLReader();
       reader.setContentHandler(releveHandler);
       reader.parse(source);
-
-      // Stockage
-      return releveHandler.getReleves();
     }
     catch (final SAXException se)
     {

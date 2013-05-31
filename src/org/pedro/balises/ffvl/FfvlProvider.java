@@ -136,6 +136,7 @@ public class FfvlProvider extends AbstractBaliseProvider
       parser = factory.newSAXParser();
       baliseHandler = new BaliseFfvlContentHandler();
       this.releveHandler = releveHandler;
+      releveHandler.setListener(this);
       lastUpdateHandler = new LastUpdateFfvlContentHandler();
     }
     catch (final SAXException se)
@@ -389,18 +390,14 @@ public class FfvlProvider extends AbstractBaliseProvider
   public boolean updateReleves() throws IOException
   {
     // Initialisations
-    boolean updated = false;
     InputStream input = null;
 
     try
     {
+      updatedReleves.clear();
       final String finalUrl = URL_RELEVES.replaceAll(URL_FFVL_KEY_GROUP, ffvlKey);
       input = getUnzippedInputStream(finalUrl);
-      final Map<String, Releve> newReleves = parseRelevesMap(new InputSource(input));
-
-      // Tout est OK
-      refreshReleves(newReleves);
-      updated = true;
+      parseReleves(new InputSource(input));
     }
     finally
     {
@@ -410,16 +407,15 @@ public class FfvlProvider extends AbstractBaliseProvider
       }
     }
 
-    return updated;
+    return !updatedReleves.isEmpty();
   }
 
   /**
    * 
    * @param source
-   * @return
    * @throws IOException
    */
-  protected Map<String, Releve> parseRelevesMap(final InputSource source) throws IOException
+  protected void parseReleves(final InputSource source) throws IOException
   {
     try
     {
@@ -427,9 +423,6 @@ public class FfvlProvider extends AbstractBaliseProvider
       final XMLReader reader = parser.getXMLReader();
       reader.setContentHandler(releveHandler);
       reader.parse(source);
-
-      // Stockage
-      return releveHandler.getReleves();
     }
     catch (final SAXException se)
     {

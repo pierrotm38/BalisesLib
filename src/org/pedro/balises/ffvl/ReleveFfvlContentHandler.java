@@ -24,10 +24,9 @@
 package org.pedro.balises.ffvl;
 
 import java.text.ParseException;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.pedro.balises.Releve;
+import org.pedro.balises.ReleveParserListener;
 import org.pedro.balises.Utils;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
@@ -41,33 +40,32 @@ import org.xml.sax.SAXException;
 public class ReleveFfvlContentHandler implements ContentHandler
 {
   // Constantes
-  private static final String       STRING_VIDE        = "";
-  private static final String       RELEVE_TAG         = "releve";
-  private static final String       ID_BALISE_TAG      = "idbalise";
-  private static final String       DATE_TAG           = "date";
-  private static final String       VITESSE_MOY_TAG    = "vitesseVentMoy";
-  private static final String       VITESSE_MAX_TAG    = "vitesseVentMax";
-  private static final String       VITESSE_MIN_TAG    = "vitesseVentMin";
-  private static final String       DIRECTION_MOY_TAG  = "directVentMoy";
-  private static final String       DIRECTION_INST_TAG = "directVentInst";
-  private static final String       TEMPERATURE_TAG    = "temperature";
-  private static final String       HYDROMETRIE_TAG    = "hydrometrie";
-  private static final String       PRESSION_TAG       = "pression";
-  private static final String       LUMINOSITE_TAG     = "luminosite";
+  private static final String    STRING_VIDE        = "";
+  private static final String    RELEVE_TAG         = "releve";
+  private static final String    ID_BALISE_TAG      = "idbalise";
+  private static final String    DATE_TAG           = "date";
+  private static final String    VITESSE_MOY_TAG    = "vitesseVentMoy";
+  private static final String    VITESSE_MAX_TAG    = "vitesseVentMax";
+  private static final String    VITESSE_MIN_TAG    = "vitesseVentMin";
+  private static final String    DIRECTION_MOY_TAG  = "directVentMoy";
+  private static final String    DIRECTION_INST_TAG = "directVentInst";
+  private static final String    TEMPERATURE_TAG    = "temperature";
+  private static final String    HYDROMETRIE_TAG    = "hydrometrie";
+  private static final String    PRESSION_TAG       = "pression";
+  private static final String    LUMINOSITE_TAG     = "luminosite";
 
   // Membres
-  private final Map<String, Releve> releves            = new HashMap<String, Releve>();
-  protected Releve                  releve;
-  protected String                  currentString      = STRING_VIDE;
+  protected final Releve         releve             = new Releve();
+  protected String               currentString      = STRING_VIDE;
+  protected ReleveParserListener listener;
 
   /**
-   * Recuperation de la liste des balises
    * 
-   * @return
+   * @param listener
    */
-  public Map<String, Releve> getReleves()
+  protected void setListener(final ReleveParserListener listener)
   {
-    return releves;
+    this.listener = listener;
   }
 
   @Override
@@ -87,10 +85,14 @@ public class ReleveFfvlContentHandler implements ContentHandler
 
     try
     {
-      if (ID_BALISE_TAG.equals(finalName))
+      if (RELEVE_TAG.equals(finalName))
+      {
+        listener.onReleveParsed(releve);
+      }
+
+      else if (ID_BALISE_TAG.equals(finalName))
       {
         releve.setId(currentString);
-        releves.put(currentString, releve);
       }
 
       else if (DATE_TAG.equals(finalName))
@@ -165,7 +167,6 @@ public class ReleveFfvlContentHandler implements ContentHandler
   @Override
   public void startDocument() throws SAXException
   {
-    releves.clear();
     currentString = STRING_VIDE;
   }
 
@@ -180,7 +181,7 @@ public class ReleveFfvlContentHandler implements ContentHandler
 
     if (RELEVE_TAG.equals(finalName))
     {
-      releve = new Releve();
+      releve.clear();
     }
 
     // RAZ
