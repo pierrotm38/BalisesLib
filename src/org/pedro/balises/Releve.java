@@ -72,14 +72,6 @@ public class Releve implements Serializable, Saveable
   public int                humidite                = Integer.MIN_VALUE;
 
   private int               hashCode;
-  
-  //TODO ?
-  @Override
-  public void finalize() throws Throwable
-  {
-    super.finalize();
-    System.out.println("Fin d'un releve : " + id);
-  }
 
   /**
    * 
