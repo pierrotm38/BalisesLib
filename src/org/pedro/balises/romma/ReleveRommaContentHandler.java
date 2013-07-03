@@ -42,37 +42,45 @@ import org.xml.sax.SAXException;
 public class ReleveRommaContentHandler implements ContentHandler
 {
   // Directions
-  private static final String       DIR_N              = "N";
-  private static final String       DIR_NNE            = "NNE";
-  private static final String       DIR_NE             = "NE";
-  private static final String       DIR_ENE            = "ENE";
-  private static final String       DIR_E              = "E";
-  private static final String       DIR_ESE            = "ESE";
-  private static final String       DIR_SE             = "SE";
-  private static final String       DIR_SSE            = "SSE";
-  private static final String       DIR_S              = "S";
-  private static final String       DIR_SSO            = "SSO";
-  private static final String       DIR_SO             = "SO";
-  private static final String       DIR_OSO            = "OSO";
-  private static final String       DIR_O              = "O";
-  private static final String       DIR_ONO            = "ONO";
-  private static final String       DIR_NO             = "NO";
-  private static final String       DIR_NNO            = "NNO";
+  private static final String       DIR_N                         = "N";
+  private static final String       DIR_NNE                       = "NNE";
+  private static final String       DIR_NE                        = "NE";
+  private static final String       DIR_ENE                       = "ENE";
+  private static final String       DIR_E                         = "E";
+  private static final String       DIR_ESE                       = "ESE";
+  private static final String       DIR_SE                        = "SE";
+  private static final String       DIR_SSE                       = "SSE";
+  private static final String       DIR_S                         = "S";
+  private static final String       DIR_SSO                       = "SSO";
+  private static final String       DIR_SO                        = "SO";
+  private static final String       DIR_OSO                       = "OSO";
+  private static final String       DIR_O                         = "O";
+  private static final String       DIR_ONO                       = "ONO";
+  private static final String       DIR_NO                        = "NO";
+  private static final String       DIR_NNO                       = "NNO";
 
   // Constantes
-  protected static final String     STRING_MOINS_MOINS = "--";
-  private static final String       STRING_VIDE        = "";
-  private static final String       RELEVE_TAG         = "releve";
-  private static final String       STATION_ID_TAG     = "stationID";
-  private static final String       DATE_TAG           = "date";
-  private static final String       VITESSE_MOY_TAG    = "vitesseVentMoy10min";
-  private static final String       DIRECTION_TAG      = "directionVentInst";
-  private static final String       TEMPERATURE_TAG    = "temperature";
-  protected static final DateFormat RELEVE_DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+  private static final char         CHAR_SPACE                    = ' ';
+  protected static final String     STRING_MOINS_MOINS            = "--";
+  private static final String       STRING_VIDE                   = "";
+  private static final String       RELEVE_TAG                    = "releve";
+  private static final String       STATION_ID_TAG                = "stationID";
+  private static final String       DATE_TAG                      = "date";
+  private static final String       VITESSE_MOY_TAG               = "vitesseVentMoy10min";
+  private static final String       DIRECTION_TAG                 = "directionVentInst";
+  private static final String       TEMPERATURE_TAG               = "temperature";
+  private static final String       RAFALE_MAXI_TAG               = "RafaleMaxi";
+  private static final String       RAFALE_MAXI_INCONNUE          = "--:--";
+  private static final String       RAFALE_MAXI_HEURE_TAG         = "RafaleMaxiHeure";
+  protected static final DateFormat RELEVE_DATE_FORMAT            = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+  private static final DateFormat   RAFALE_MAXI_DATE_FORMAT       = new SimpleDateFormat("dd-MM-yyyy");
+  private static final DateFormat   RAFALE_MAXI_DATE_HEURE_FORMAT = new SimpleDateFormat("dd-MM-yyyy HH:mm");
 
   // Membres
-  protected final Releve            releve             = new Releve();
-  protected String                  currentString      = STRING_VIDE;
+  protected final StringBuilder     rafaleMaxiBuilder             = new StringBuilder();
+  protected final Releve            releve                        = new Releve();
+  protected String                  heureRafaleMaxi               = null;
+  protected String                  currentString                 = STRING_VIDE;
   protected ReleveParserListener    listener;
 
   /**
@@ -103,6 +111,36 @@ public class ReleveRommaContentHandler implements ContentHandler
     {
       if (RELEVE_TAG.equals(finalName))
       {
+        // Calcul de la date/heure du vent max
+        if ((releve.date != null) && (heureRafaleMaxi != null))
+        {
+          rafaleMaxiBuilder.setLength(0);
+          rafaleMaxiBuilder.append(RAFALE_MAXI_DATE_FORMAT.format(releve.date));
+          rafaleMaxiBuilder.append(CHAR_SPACE);
+          rafaleMaxiBuilder.append(heureRafaleMaxi);
+          try
+          {
+            // Analyse date/heure
+            releve.dateHeureVentMaxi = RAFALE_MAXI_DATE_HEURE_FORMAT.parse(rafaleMaxiBuilder.toString());
+
+            // Decalage dans le fuseau horaire UTC
+            Utils.toUTC(releve.dateHeureVentMaxi, XmlRommaProvider.sourceTimeZone);
+
+            // Decalage a la veille si heure de la rafale apres le releve
+            if (releve.date.getTime() < releve.dateHeureVentMaxi.getTime())
+            {
+              releve.dateHeureVentMaxi.setTime(releve.dateHeureVentMaxi.getTime() - 86400);
+            }
+          }
+          catch (final ParseException pe)
+          {
+            // Impossible de calculer la date de la rafale maxi => effacement de la rafale
+            releve.ventMaxi = Double.NaN;
+            pe.printStackTrace(System.err);
+          }
+        }
+
+        // Notification
         listener.onReleveParsed(releve);
       }
 
@@ -134,6 +172,17 @@ public class ReleveRommaContentHandler implements ContentHandler
       {
         releve.temperature = (STRING_MOINS_MOINS.equals(currentString) ? Double.NaN : Utils.parsePrimitiveDouble(currentString));
       }
+
+      else if (RAFALE_MAXI_TAG.equals(finalName))
+      {
+        releve.ventMaxi = (STRING_MOINS_MOINS.equals(currentString) ? Double.NaN : Utils.parsePrimitiveDouble(currentString));
+      }
+
+      else if (RAFALE_MAXI_HEURE_TAG.equals(finalName))
+      {
+        heureRafaleMaxi = (RAFALE_MAXI_INCONNUE.equals(currentString) ? null : currentString);
+      }
+
     }
     catch (final ParseException pe)
     {
@@ -243,6 +292,7 @@ public class ReleveRommaContentHandler implements ContentHandler
     if (RELEVE_TAG.equals(finalName))
     {
       releve.clear();
+      heureRafaleMaxi = null;
     }
 
     // RAZ
