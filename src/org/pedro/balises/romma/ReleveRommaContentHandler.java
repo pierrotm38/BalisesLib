@@ -26,6 +26,7 @@ package org.pedro.balises.romma;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.regex.Pattern;
 
 import org.pedro.balises.Releve;
 import org.pedro.balises.ReleveParserListener;
@@ -70,7 +71,7 @@ public class ReleveRommaContentHandler implements ContentHandler
   private static final String       DIRECTION_TAG                 = "directionVentInst";
   private static final String       TEMPERATURE_TAG               = "temperature";
   private static final String       RAFALE_MAXI_TAG               = "RafaleMaxi";
-  private static final String       RAFALE_MAXI_INCONNUE          = "--:--";
+  private static final Pattern      RAFALE_MAXI_HEURE_PATTERN     = Pattern.compile("\\d+:\\d+");
   private static final String       RAFALE_MAXI_HEURE_TAG         = "RafaleMaxiHeure";
   protected static final DateFormat RELEVE_DATE_FORMAT            = new SimpleDateFormat("dd-MM-yyyy HH:mm");
   private static final DateFormat   RAFALE_MAXI_DATE_FORMAT       = new SimpleDateFormat("dd-MM-yyyy");
@@ -180,7 +181,7 @@ public class ReleveRommaContentHandler implements ContentHandler
 
       else if (RAFALE_MAXI_HEURE_TAG.equals(finalName))
       {
-        heureRafaleMaxi = (RAFALE_MAXI_INCONNUE.equals(currentString) ? null : currentString);
+        heureRafaleMaxi = (RAFALE_MAXI_HEURE_PATTERN.matcher(currentString).matches() ? currentString : null);
       }
 
     }
