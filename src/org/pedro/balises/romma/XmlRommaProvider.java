@@ -299,7 +299,7 @@ public class XmlRommaProvider extends AbstractBaliseProvider
   }
 
   @Override
-  public boolean updateReleves() throws IOException
+  public synchronized boolean updateReleves() throws IOException
   {
     // Initialisations
     InputStream input = null;
