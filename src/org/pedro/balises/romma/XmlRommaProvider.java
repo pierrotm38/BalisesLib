@@ -270,7 +270,9 @@ public class XmlRommaProvider extends AbstractBaliseProvider
     }
     catch (final SAXException se)
     {
-      throw new IOException(se.getMessage());
+      final IOException ioe = new IOException(se.getMessage());
+      ioe.setStackTrace(se.getStackTrace());
+      throw ioe;
     }
   }
 
@@ -338,7 +340,9 @@ public class XmlRommaProvider extends AbstractBaliseProvider
     }
     catch (final SAXException se)
     {
-      throw new IOException(se.getMessage());
+      final IOException ioe = new IOException(se.getMessage());
+      ioe.setStackTrace(se.getStackTrace());
+      throw ioe;
     }
   }
 

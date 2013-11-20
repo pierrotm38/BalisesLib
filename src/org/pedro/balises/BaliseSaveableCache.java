@@ -153,7 +153,9 @@ public abstract class BaliseSaveableCache extends BaliseSerializableCache
     }
     catch (final Throwable th)
     {
-      throw new IOException(th.getMessage());
+      final IOException ioe = new IOException(th.getMessage());
+      ioe.setStackTrace(th.getStackTrace());
+      throw ioe;
     }
     finally
     {
@@ -198,7 +200,9 @@ public abstract class BaliseSaveableCache extends BaliseSerializableCache
     }
     catch (final Throwable th)
     {
-      throw new IOException(th.getMessage());
+      final IOException ioe = new IOException(th.getMessage());
+      ioe.setStackTrace(th.getStackTrace());
+      throw ioe;
     }
     finally
     {
@@ -237,7 +241,9 @@ public abstract class BaliseSaveableCache extends BaliseSerializableCache
     }
     catch (final Throwable th)
     {
-      throw new IOException(th.getMessage());
+      final IOException ioe = new IOException(th.getMessage());
+      ioe.setStackTrace(th.getStackTrace());
+      throw ioe;
     }
     finally
     {
@@ -282,7 +288,9 @@ public abstract class BaliseSaveableCache extends BaliseSerializableCache
     }
     catch (final Throwable th)
     {
-      throw new IOException(th.getMessage());
+      final IOException ioe = new IOException(th.getMessage());
+      ioe.setStackTrace(th.getStackTrace());
+      throw ioe;
     }
     finally
     {

@@ -237,7 +237,9 @@ public class FfvlProvider extends AbstractBaliseProvider
     }
     catch (final SAXException se)
     {
-      throw new IOException(se.getMessage());
+      final IOException ioe = new IOException(se.getMessage());
+      ioe.setStackTrace(se.getStackTrace());
+      throw ioe;
     }
   }
 
@@ -354,7 +356,9 @@ public class FfvlProvider extends AbstractBaliseProvider
     }
     catch (final SAXException se)
     {
-      throw new IOException(se.getMessage());
+      final IOException ioe = new IOException(se.getMessage());
+      ioe.setStackTrace(se.getStackTrace());
+      throw ioe;
     }
   }
 
@@ -426,7 +430,9 @@ public class FfvlProvider extends AbstractBaliseProvider
     }
     catch (final SAXException se)
     {
-      throw new IOException(se.getMessage());
+      final IOException ioe = new IOException(se.getMessage());
+      ioe.setStackTrace(se.getStackTrace());
+      throw ioe;
     }
   }
 
@@ -500,6 +506,16 @@ public class FfvlProvider extends AbstractBaliseProvider
     {
       th.printStackTrace();
     }
+    
+    // Test IOException
+    final IOException ioe = new IOException("toto");
+    final StackTraceElement[] elements = new StackTraceElement[3];
+    elements[0] = new StackTraceElement("arg0.0", "arg1.0", "arg2.0", 0);
+    elements[1] = new StackTraceElement("arg0.1", "arg1.1", "arg2.1", 2);
+    elements[2] = new StackTraceElement("arg0.2", "arg1.2", "arg2.2", 2);
+    ioe.setStackTrace(elements);
+    System.out.println("done : " + ioe);
+    ioe.printStackTrace();
   }
   */
 }

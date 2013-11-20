@@ -120,7 +120,9 @@ public abstract class BaliseSerializableCache implements BaliseCache
     }
     catch (final ClassNotFoundException cnfe)
     {
-      throw new IOException(cnfe.getMessage());
+      final IOException ioe = new IOException(cnfe.getMessage());
+      ioe.setStackTrace(cnfe.getStackTrace());
+      throw ioe;
     }
     finally
     {
