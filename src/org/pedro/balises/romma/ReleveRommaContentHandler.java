@@ -43,45 +43,46 @@ import org.xml.sax.SAXException;
 public class ReleveRommaContentHandler implements ContentHandler
 {
   // Directions
-  private static final String       DIR_N                         = "N";
-  private static final String       DIR_NNE                       = "NNE";
-  private static final String       DIR_NE                        = "NE";
-  private static final String       DIR_ENE                       = "ENE";
-  private static final String       DIR_E                         = "E";
-  private static final String       DIR_ESE                       = "ESE";
-  private static final String       DIR_SE                        = "SE";
-  private static final String       DIR_SSE                       = "SSE";
-  private static final String       DIR_S                         = "S";
-  private static final String       DIR_SSO                       = "SSO";
-  private static final String       DIR_SO                        = "SO";
-  private static final String       DIR_OSO                       = "OSO";
-  private static final String       DIR_O                         = "O";
-  private static final String       DIR_ONO                       = "ONO";
-  private static final String       DIR_NO                        = "NO";
-  private static final String       DIR_NNO                       = "NNO";
+  private static final String       DIR_N                          = "N";
+  private static final String       DIR_NNE                        = "NNE";
+  private static final String       DIR_NE                         = "NE";
+  private static final String       DIR_ENE                        = "ENE";
+  private static final String       DIR_E                          = "E";
+  private static final String       DIR_ESE                        = "ESE";
+  private static final String       DIR_SE                         = "SE";
+  private static final String       DIR_SSE                        = "SSE";
+  private static final String       DIR_S                          = "S";
+  private static final String       DIR_SSO                        = "SSO";
+  private static final String       DIR_SO                         = "SO";
+  private static final String       DIR_OSO                        = "OSO";
+  private static final String       DIR_O                          = "O";
+  private static final String       DIR_ONO                        = "ONO";
+  private static final String       DIR_NO                         = "NO";
+  private static final String       DIR_NNO                        = "NNO";
 
   // Constantes
-  private static final char         CHAR_SPACE                    = ' ';
-  protected static final String     STRING_MOINS_MOINS            = "--";
-  private static final String       STRING_VIDE                   = "";
-  private static final String       RELEVE_TAG                    = "releve";
-  private static final String       STATION_ID_TAG                = "stationID";
-  private static final String       DATE_TAG                      = "date";
-  private static final String       VITESSE_MOY_TAG               = "vitesseVentMoy10min";
-  private static final String       DIRECTION_TAG                 = "directionVentInst";
-  private static final String       TEMPERATURE_TAG               = "temperature";
-  private static final String       RAFALE_MAXI_TAG               = "RafaleMaxi";
-  private static final Pattern      RAFALE_MAXI_HEURE_PATTERN     = Pattern.compile("\\d+:\\d+");
-  private static final String       RAFALE_MAXI_HEURE_TAG         = "RafaleMaxiHeure";
-  protected static final DateFormat RELEVE_DATE_FORMAT            = new SimpleDateFormat("dd-MM-yyyy HH:mm");
-  private static final DateFormat   RAFALE_MAXI_DATE_FORMAT       = new SimpleDateFormat("dd-MM-yyyy");
-  private static final DateFormat   RAFALE_MAXI_DATE_HEURE_FORMAT = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+  private static final char         CHAR_SPACE                     = ' ';
+  protected static final String     STRING_MOINS_MOINS             = "--";
+  protected static final String     STRING_MOINS_MOINS_POINT_MOINS = "--.-";
+  private static final String       STRING_VIDE                    = "";
+  private static final String       RELEVE_TAG                     = "releve";
+  private static final String       STATION_ID_TAG                 = "stationID";
+  private static final String       DATE_TAG                       = "date";
+  private static final String       VITESSE_MOY_TAG                = "vitesseVentMoy10min";
+  private static final String       DIRECTION_TAG                  = "directionVentInst";
+  private static final String       TEMPERATURE_TAG                = "temperature";
+  private static final String       RAFALE_MAXI_TAG                = "RafaleMaxi";
+  private static final Pattern      RAFALE_MAXI_HEURE_PATTERN      = Pattern.compile("\\d+:\\d+");
+  private static final String       RAFALE_MAXI_HEURE_TAG          = "RafaleMaxiHeure";
+  protected static final DateFormat RELEVE_DATE_FORMAT             = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+  private static final DateFormat   RAFALE_MAXI_DATE_FORMAT        = new SimpleDateFormat("dd-MM-yyyy");
+  private static final DateFormat   RAFALE_MAXI_DATE_HEURE_FORMAT  = new SimpleDateFormat("dd-MM-yyyy HH:mm");
 
   // Membres
-  protected final StringBuilder     rafaleMaxiBuilder             = new StringBuilder();
-  protected final Releve            releve                        = new Releve();
-  protected String                  heureRafaleMaxi               = null;
-  protected String                  currentString                 = STRING_VIDE;
+  protected final StringBuilder     rafaleMaxiBuilder              = new StringBuilder();
+  protected final Releve            releve                         = new Releve();
+  protected String                  heureRafaleMaxi                = null;
+  protected String                  currentString                  = STRING_VIDE;
   protected ReleveParserListener    listener;
 
   /**
@@ -160,7 +161,7 @@ public class ReleveRommaContentHandler implements ContentHandler
 
       else if (VITESSE_MOY_TAG.equals(finalName))
       {
-        releve.ventMoyen = (STRING_MOINS_MOINS.equals(currentString) ? Double.NaN : Utils.parsePrimitiveDouble(currentString));
+        releve.ventMoyen = (STRING_MOINS_MOINS.equals(currentString) || STRING_MOINS_MOINS_POINT_MOINS.equals(currentString) ? Double.NaN : Utils.parsePrimitiveDouble(currentString));
       }
 
       else if (DIRECTION_TAG.equals(finalName))
@@ -171,12 +172,12 @@ public class ReleveRommaContentHandler implements ContentHandler
 
       else if (TEMPERATURE_TAG.equals(finalName))
       {
-        releve.temperature = (STRING_MOINS_MOINS.equals(currentString) ? Double.NaN : Utils.parsePrimitiveDouble(currentString));
+        releve.temperature = (STRING_MOINS_MOINS.equals(currentString) || STRING_MOINS_MOINS_POINT_MOINS.equals(currentString) ? Double.NaN : Utils.parsePrimitiveDouble(currentString));
       }
 
       else if (RAFALE_MAXI_TAG.equals(finalName))
       {
-        releve.ventMaxi = (STRING_MOINS_MOINS.equals(currentString) ? Double.NaN : Utils.parsePrimitiveDouble(currentString));
+        releve.ventMaxi = (STRING_MOINS_MOINS.equals(currentString) || STRING_MOINS_MOINS_POINT_MOINS.equals(currentString) ? Double.NaN : Utils.parsePrimitiveDouble(currentString));
       }
 
       else if (RAFALE_MAXI_HEURE_TAG.equals(finalName))
