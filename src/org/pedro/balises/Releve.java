@@ -41,10 +41,10 @@ public class Releve implements Serializable, Saveable
   private static final long serialVersionUID        = 179670899197547407L;
 
   public static final int   PLUIE_AUCUNE            = 0;
-  public static final int   PLUIE_FAIBLE            = 1;
-  public static final int   PLUIE_MOYENNE           = 2;
-  public static final int   PLUIE_FORTE             = 3;
-  public static final int   PLUIE_TRES_FORTE        = 4;
+  public static final int   PLUIE_FAIBLE            = 1;                  // hydro < 2 mm/h
+  public static final int   PLUIE_MOYENNE           = 2;                  // 2 <= hydro < 7.6 mm/h
+  public static final int   PLUIE_FORTE             = 3;                  // 7.6 <= hydro < 10 mm/h
+  public static final int   PLUIE_TRES_FORTE        = 4;                  // hydro >= 10 mm/h
 
   public String             id;
   public Date               date;
@@ -104,6 +104,50 @@ public class Releve implements Serializable, Saveable
     humidite = Integer.MIN_VALUE;
 
     hashCode = 0;
+  }
+
+  /**
+   * 
+   */
+  public void calculatePluieFromHydrometrie()
+  {
+    // Pas d'info
+    if (Double.isNaN(hydrometrie))
+    {
+      pluie = Integer.MIN_VALUE;
+      return;
+    }
+
+    // Pas de pluie
+    if (hydrometrie == 0)
+    {
+      pluie = PLUIE_AUCUNE;
+      return;
+    }
+
+    // Faible
+    if (hydrometrie < 2)
+    {
+      pluie = PLUIE_FAIBLE;
+      return;
+    }
+
+    // Moyenne
+    if (hydrometrie < 7.6)
+    {
+      pluie = PLUIE_MOYENNE;
+      return;
+    }
+
+    // Forte
+    if (hydrometrie < 10)
+    {
+      pluie = PLUIE_FORTE;
+      return;
+    }
+
+    // Tres forte
+    pluie = PLUIE_TRES_FORTE;
   }
 
   /**
