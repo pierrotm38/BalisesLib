@@ -304,4 +304,10 @@ public class CachedProvider implements BaliseProvider
   {
     return provider;
   }
+
+  @Override
+  public int getDefaultDeltaReleves()
+  {
+    return provider.getDefaultDeltaReleves();
+  }
 }

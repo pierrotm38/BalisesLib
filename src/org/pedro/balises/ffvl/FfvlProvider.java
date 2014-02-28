@@ -475,6 +475,12 @@ public class FfvlProvider extends AbstractBaliseProvider
     return false;
   }
 
+  @Override
+  public int getDefaultDeltaReleves()
+  {
+    return 20;
+  }
+
   /**
    * 
    * @param args

@@ -384,4 +384,10 @@ public class XmlRommaProvider extends AbstractBaliseProvider
   {
     return false;
   }
+
+  @Override
+  public int getDefaultDeltaReleves()
+  {
+    return 20;
+  }
 }

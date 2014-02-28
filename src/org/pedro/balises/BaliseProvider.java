@@ -166,4 +166,11 @@ public interface BaliseProvider
    * @return
    */
   public Class<? extends BaliseProvider> getBaliseProviderClass();
+
+  /**
+   * Intervalle par defaut (en minutes) entre 2 releves
+   * 
+   * @return
+   */
+  public int getDefaultDeltaReleves();
 }
