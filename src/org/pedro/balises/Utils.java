@@ -437,4 +437,23 @@ public abstract class Utils
 
     return buffer.toString();
   }
+
+  /**
+   * 
+   * @param url
+   */
+  public static void checkNotMainThread(final String url)
+  {
+    final String currentThreadName = Thread.currentThread().getName();
+    if ("main".equals(currentThreadName))
+    {
+      System.out.println("### Not OK for : " + url);
+      final Exception ex = new RuntimeException("Main Thread for url : " + url);
+      ex.printStackTrace(System.err);
+    }
+    else
+    {
+      System.out.println("OK " + currentThreadName + " for : " + url);
+    }
+  }
 }
