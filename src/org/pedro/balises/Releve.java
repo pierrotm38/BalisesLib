@@ -289,7 +289,7 @@ public class Releve implements Serializable, Saveable
    */
   private void calculateHashCode()
   {
-    hashCode = id.hashCode();
+    hashCode = (id == null ? 0 : id.hashCode());
   }
 
   @Override
