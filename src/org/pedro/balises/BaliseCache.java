@@ -105,4 +105,9 @@ public interface BaliseCache
    * @throws IOException
    */
   public Map<String, Releve> restoreReleves(String key, CachedProvider provider) throws IOException;
+
+  /**
+   * 
+   */
+  public void onShutdown();
 }
