@@ -185,15 +185,10 @@ public class ReleveRommaContentHandler implements ContentHandler
         heureRafaleMaxi = (RAFALE_MAXI_HEURE_PATTERN.matcher(currentString).matches() ? currentString : null);
       }
     }
-    catch (final ParseException pe)
+    catch (final Throwable th)
     {
-      System.err.println("Error parsing '" + currentString + "' for <" + finalName + "> (ParseException)");
-      //pe.printStackTrace(System.err);
-    }
-    catch (final NumberFormatException nfe)
-    {
-      System.err.println("Error parsing '" + currentString + "' for <" + finalName + "> (NumberFormatException)");
-      //nfe.printStackTrace(System.err);
+      System.err.println("Error parsing '" + currentString + "' for <" + finalName + "> (" + th.getClass().getSimpleName() + ")");
+      //th.printStackTrace(System.err);
     }
 
     // RAZ

@@ -24,7 +24,6 @@
 package org.pedro.balises.ffvl;
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -112,9 +111,10 @@ public final class LastUpdateFfvlContentHandler implements ContentHandler
         // Timestamp final
         timestamp = Long.valueOf(date.getTime());
       }
-      catch (final ParseException pe)
+      catch (final Throwable th)
       {
-        // Rien
+        System.err.println("Error parsing for <" + finalName + "> (" + th.getClass().getSimpleName() + ")");
+        //th.printStackTrace(System.err);
       }
     }
 

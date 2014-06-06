@@ -23,8 +23,6 @@
  ******************************************************************************/
 package org.pedro.balises.ffvl;
 
-import java.text.ParseException;
-
 import org.pedro.balises.Releve;
 import org.pedro.balises.ReleveParserListener;
 import org.pedro.balises.Utils;
@@ -151,13 +149,10 @@ public class ReleveFfvlContentHandler implements ContentHandler
         releve.luminosite = Utils.isStringVide(currentString) ? null : currentString;
       }
     }
-    catch (final ParseException pe)
+    catch (final Throwable th)
     {
-      pe.printStackTrace(System.err);
-    }
-    catch (final NumberFormatException nfe)
-    {
-      nfe.printStackTrace(System.err);
+      System.err.println("Error parsing '" + currentString + "' for <" + finalName + "> (" + th.getClass().getSimpleName() + ")");
+      //th.printStackTrace(System.err);
     }
 
     // RAZ
