@@ -391,7 +391,7 @@ public class FfvlProvider extends AbstractBaliseProvider
   }
 
   @Override
-  public synchronized boolean updateReleves() throws IOException
+  public boolean updateReleves() throws IOException
   {
     // Initialisations
     InputStream input = null;

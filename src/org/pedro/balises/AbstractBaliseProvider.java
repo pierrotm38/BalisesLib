@@ -60,13 +60,13 @@ public abstract class AbstractBaliseProvider implements BaliseProvider, RelevePa
   }
 
   @Override
-  public final synchronized Collection<Balise> getBalises()
+  public final Collection<Balise> getBalises()
   {
     return balises.values();
   }
 
   @Override
-  public final synchronized Balise getBaliseById(final String id)
+  public final Balise getBaliseById(final String id)
   {
     return balises.get(id);
   }
@@ -74,7 +74,7 @@ public abstract class AbstractBaliseProvider implements BaliseProvider, RelevePa
   /**
    * @return the balises
    */
-  protected final synchronized Map<String, Balise> getBalisesMap()
+  protected final Map<String, Balise> getBalisesMap()
   {
     return balises;
   }
@@ -82,19 +82,19 @@ public abstract class AbstractBaliseProvider implements BaliseProvider, RelevePa
   /**
    * @param balises the balises to set
    */
-  protected final synchronized void setBalisesMap(final Map<String, Balise> balises)
+  protected final void setBalisesMap(final Map<String, Balise> balises)
   {
     this.balises = balises;
   }
 
   @Override
-  public final synchronized Collection<Releve> getReleves()
+  public final Collection<Releve> getReleves()
   {
     return releves.values();
   }
 
   @Override
-  public final synchronized Releve getReleveById(final String id)
+  public final Releve getReleveById(final String id)
   {
     return releves.get(id);
   }
@@ -102,7 +102,7 @@ public abstract class AbstractBaliseProvider implements BaliseProvider, RelevePa
   /**
    * @return the releves
    */
-  protected final synchronized Map<String, Releve> getRelevesMap()
+  protected final Map<String, Releve> getRelevesMap()
   {
     return releves;
   }
@@ -110,13 +110,13 @@ public abstract class AbstractBaliseProvider implements BaliseProvider, RelevePa
   /**
    * @param releves the releves to set
    */
-  protected final synchronized void setRelevesMap(final Map<String, Releve> releves)
+  protected final void setRelevesMap(final Map<String, Releve> releves)
   {
     this.releves = releves;
   }
 
   @Override
-  public synchronized void onReleveParsed(final Releve nouveau)
+  public void onReleveParsed(final Releve nouveau)
   {
     // Recherche dans les anciens
     final Releve ancien = releves.get(nouveau.id);
@@ -208,7 +208,7 @@ public abstract class AbstractBaliseProvider implements BaliseProvider, RelevePa
   }
 
   @Override
-  public synchronized Collection<Releve> getUpdatedReleves()
+  public Collection<Releve> getUpdatedReleves()
   {
     return updatedReleves.values();
   }
